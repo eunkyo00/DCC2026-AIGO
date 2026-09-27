@@ -14,16 +14,46 @@ class LaunchTests(unittest.TestCase):
     def test_blank_config_fails_before_environment(self):
         with tempfile.TemporaryDirectory() as td:
             root=Path(td)
-            (root/'config.py').write_text('INPUT_JSON=""\n')
-            with patch.object(run,'ROOT',root),self.assertRaisesRegex(RuntimeError,'Fill INPUT_JSON'):
+            with patch.object(run,'INPUT_JSON',''),self.assertRaisesRegex(RuntimeError,'Fill INPUT_JSON'):
                 run.load_settings()
+
+    def test_code_identity_allows_paths_but_detects_code_changes(self):
+        source=Path(run.__file__).read_text()
+        before=run.code_identity()
+        with tempfile.TemporaryDirectory() as td:
+            path=Path(td)/'run.py'
+            changed=source.replace('INPUT_JSON = ""', 'INPUT_JSON = "/실제 경로/inputs.json"',1)
+            path.write_text(changed)
+            with patch.object(run,'__file__',str(path)):
+                self.assertEqual(run.code_identity(),before)
+                path.write_text(changed.replace('WINDOW = 12','WINDOW = 8',1))
+                self.assertNotEqual(run.code_identity(),before)
+
+    def test_environment_installs_embedded_requirements_without_sidecar(self):
+        with tempfile.TemporaryDirectory() as td:
+            out=Path(td);envdir=out/'.venv';envdir.mkdir()
+            hardware=dict(torch='synthetic')
+            save(envdir/'.wavlm_environment.json',dict(base_python=str(Path(run.sys.executable).resolve()),torch='synthetic',requirements_sha256=run.digest(run.REQUIREMENTS)))
+            calls=[];checks=[0]
+            def command(args,**kwargs):
+                calls.append(list(map(str,args)))
+                if '-c' in args:
+                    checks[0]+=1
+                    if checks[0]==1:raise RuntimeError('missing dependency')
+                return ''
+            with patch.object(run,'command',command),patch.object(run,'probe',return_value=hardware):
+                run.environment(out,hardware)
+            install=next(c for c in calls if 'pip' in c)
+            self.assertEqual(install[5:],run.REQUIREMENTS)
+            self.assertFalse(any('requirements.txt' in a for c in calls for a in c))
+            self.assertFalse(any(a.startswith(('torch==','torchaudio==')) for a in install))
 
     def test_input_json_integrity_and_resume(self):
         with tempfile.TemporaryDirectory() as td:
             root=Path(td);path=root/'inputs.json';body='{"synthetic": true}'
             save(path,dict(format='wavlm-inputs-v1',files={'data/fixture.json':body}))
-            save(root/'bundle_manifest.json',dict(input_json_sha256=run.sha(path),files={'data/fixture.json':hashlib.sha256(body.encode()).hexdigest()}))
-            with patch.object(run,'ROOT',root),patch.object(run,'bundle'):
+            manifest=dict(input_json_sha256=run.sha(path),files={'data/fixture.json':hashlib.sha256(body.encode()).hexdigest()})
+            with patch.object(run,'ROOT',root),patch.object(run,'bundle'),patch.object(run,'runtime_manifest',return_value=manifest):
                 run.prepare_metadata(path);run.prepare_metadata(path)
                 self.assertEqual((root/'data/fixture.json').read_text(),body)
                 (root/'data/fixture.json').write_bytes(b'corrupt')
@@ -271,7 +301,7 @@ class IntegrityTests(unittest.TestCase):
         from run import verify
         with tempfile.TemporaryDirectory() as td:
             p=Path(td);out=p/'result';out.mkdir()
-            ih_record=dict(config={'data_root':'synthetic-fixture'},bundle_sha256=sha(ROOT/'bundle_manifest.json'),model=MODEL,revision=REVISION,source_hashes=SOURCE_HASHES,
+            ih_record=dict(config={'data_root':'synthetic-fixture'},bundle_sha256=bundle_identity(),model=MODEL,revision=REVISION,source_hashes=SOURCE_HASHES,
                            inner_split_sha256=sha(ROOT/'data/inner_split.csv'),class_order=['F','M'],layers=LAYERS,window_seconds=WINDOW)
             save(out/'identity.json',ih_record);ih=digest(ih_record)
             save(out/'dataset_check.json',dict(status='pass',calls=27985,failures=[],data_root='synthetic-fixture',bundle_sha256=ih_record['bundle_sha256']))

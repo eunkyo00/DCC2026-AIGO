@@ -1,8 +1,26 @@
-# config.py의 빈 경로를 채운 뒤 python3 run.py 한 번으로 실행합니다.
-# 학습·중단 재개·최종 평가·결과 검증을 이 파일에 모았습니다.
-# 입력: 별도 JSON 한 개 + 원본 Training WAV. 입력 ZIP은 필요 없습니다.
-# 기존 버전과 실행 identity가 다르므로 새 OUTPUT_DIR을 사용하세요.
+# 아래 5개 경로만 실제 서버의 절대 경로로 입력하세요.
+# 원본 WAV는 별도 준비: DATA_ROOT 바로 아래에 Training/ 폴더가 있어야 합니다.
+# INPUT_JSON: 따로 전달받은 wavlm_gender_inputs.json (원본 음성 미포함, ZIP 불필요).
+INPUT_JSON = ""
+DATA_ROOT = ""
+OUTPUT_DIR = ""
+HF_CACHE_DIR = ""
+GPU_LOCK_PATH = ""  # 같은 서버의 실험들이 공유할 잠금 파일 경로. 부모 폴더는 미리 준비하세요.
 
+# Linux / Python 3.12 / 정상 CUDA torch+torchaudio 환경에서 실행하세요.
+# L4는 BF16, T4는 FP32를 자동 선택합니다. GPU 두 종류만 지원합니다.
+# 가상환경은 OUTPUT_DIR/.venv에 자동 생성하며 기존 torch는 재설치하지 않습니다.
+# 실행: python3 run.py
+# 기본 실행은 frozen 특징+LR입니다. 상위층 적응 학습은 자동으로 하지 않습니다.
+# 결과: OUTPUT_DIR/wavlm_results.zip, OUTPUT_DIR/verified/REPORT.md
+# 중단 후 같은 명령을 실행하면 완료 단계/통화는 확인 후 재사용합니다.
+# 학습 checkpoint 사이의 미저장 step은 재실행 범위를 기록합니다.
+# 실제 GPU 속도/메모리는 미측정입니다. benchmark 결과를 확인하세요.
+# 실행 프로세스를 멈춰도 대여 GPU 요금은 서비스에서 별도로 정지해야 합니다.
+
+# 이전 버전에서 실행했다면 새 OUTPUT_DIR을 지정하세요. 이전 결과는 보존합니다.
+
+# 아래는 실행 코드입니다. 경로 외에는 수정하지 마세요.
 
 # 공통 무결성 검사·저장
 import contextlib
@@ -26,6 +44,61 @@ SOURCE_HASHES = {
 SEED = 42
 LAYERS = [6, 12, 18, 24]
 WINDOW = 12  # predeclared context/cost compromise, not selected on Validation
+
+
+# 배포용 보조 파일 없이 사용하는 고정 환경·입력 해시입니다.
+REQUIREMENTS = ['numpy==2.2.2',
+ 'scipy==1.15.3',
+ 'soundfile==0.13.1',
+ 'transformers==4.46.3',
+ 'tokenizers==0.20.3',
+ 'huggingface-hub==0.31.4',
+ 'safetensors==0.5.3',
+ 'scikit-learn==1.6.1',
+ 'joblib==1.4.2',
+ 'psutil==7.0.0']
+INPUT_MANIFEST = {'model': 'microsoft/wavlm-large',
+ 'revision': 'c1423ed94bb01d80a3f5ce5bc39f6026a0f4828c',
+ 'source_hashes': {'validation/split_assignments.csv': '04b5018778321f775a0bf95949a37636090d4df4e3710b16627dfee309408f06',
+                   'validation/manifests/calls.csv': 'dc57d0f7bea6e06017ac3e27444a0ff5bb299e401ea787400e84cbdf7d072e23',
+                   'eda/eda_outputs/segments.csv': '8bf8c83c0190232e4500b4067bc28d2611b09dd227a7ce4dc9c3741e6dcce584'},
+ 'baseline_comparison_sha256': 'e4c9f2addbdbc339f34f459cc562121a8df429e761a33b7b70a18a9a6dc99081',
+ 'files': {'data/jobs.json': '3e4f024ad7c0e5bec8fb2c5ae9af25c467dbc78129d8286faa79a54f237c4e89',
+           'data/inner_split.csv': 'b6664bee9b72dd14a53743388274577d6c5b73e5ef5f51ab4d53da6fa3321e17',
+           'data/inner_train_ids.txt': '1de6452fffaa1cbe75e0a0581ac6a989417a4acdd053b22e00e17a5a3ba724fc',
+           'data/dev_ids.txt': '8b695c719a757ed275586846fb0a9ab12003732b5e967eb58dd21c4e271e4c80',
+           'data/train_audio_review.csv': '2482439d77a9a2fd6ab81bf5e0cfeaba904da13d336a45e069f9614df11f1e53',
+           'data/baseline_predictions.csv': 'e4c9f2addbdbc339f34f459cc562121a8df429e761a33b7b70a18a9a6dc99081',
+           'data/wav_inventory.csv': 'ce7df76040db8075371d2160f753b8ea1da6646fb0269fd3987a6dbaac1e7bf1'},
+ 'input_json_sha256': 'd3d121bd843d1cfd26cb0bd3a03653d70097ba66f8f412b28f2268f435e1a13a'}
+SETTINGS_KEYS = ('INPUT_JSON', 'DATA_ROOT', 'OUTPUT_DIR', 'HF_CACHE_DIR', 'GPU_LOCK_PATH')
+
+
+def code_identity():
+    # 입력 경로만 제외한 실제 코드의 해시입니다. 경로는 실행 config에 따로 기록합니다.
+    # Python 버전별 AST 표현 차이가 없도록 원문 바이트를 정규화합니다.
+    import ast
+    source=Path(__file__).read_bytes()
+    tree=ast.parse(source)
+    lines=source.splitlines(keepends=True)
+    offsets=[0]
+    for line in lines:offsets.append(offsets[-1]+len(line))
+    edits=[]
+    for node in tree.body:
+        if isinstance(node,ast.Assign) and len(node.targets)==1 and isinstance(node.targets[0],ast.Name) and node.targets[0].id in SETTINGS_KEYS:
+            v=node.value
+            edits.append((offsets[v.lineno-1]+v.col_offset,offsets[v.end_lineno-1]+v.end_col_offset))
+    require(len(edits)==len(SETTINGS_KEYS),'Settings declarations changed')
+    for start,end in sorted(edits,reverse=True):source=source[:start]+b'""'+source[end:]
+    return hashlib.sha256(source).hexdigest()
+
+
+def runtime_manifest():
+    return dict(INPUT_MANIFEST, code_sha256=code_identity(), requirements=REQUIREMENTS)
+
+
+def bundle_identity():
+    return digest(runtime_manifest())
 
 
 def require(ok, message):
@@ -155,7 +228,7 @@ def lock(path):
 
 
 def bundle():
-    m = read(ROOT/'bundle_manifest.json')
+    m = runtime_manifest()
     for name, expected in m['files'].items():
         require(sha(ROOT/name) == expected, f'Bundle changed: {name}')
     jobs = read(ROOT/'data/jobs.json')
@@ -194,7 +267,7 @@ def validate_paths(config):
             'gpu_lock_path must be a shared host lock outside experiment output/cache')
     if (out/'identity.json').exists():
         old=read(out/'identity.json')
-        require(old.get('bundle_sha256')==sha(ROOT/'bundle_manifest.json') and old.get('config')==config,
+        require(old.get('bundle_sha256')==bundle_identity() and old.get('config')==config,
                 'Existing output has a different execution identity; choose a new empty output')
     require(config.get('precision') in ('fp32','bf16'), 'Set precision: T4=fp32; L4=bf16 (or fp32)')
     require(isinstance(config.get('expected_gpu'), str) and config['expected_gpu'].strip(), 'Fill expected_gpu from nvidia-smi')
@@ -226,7 +299,7 @@ def check_dataset(config):
         if (i+1)%2000 == 0: print(f'WAV headers {i+1}/{len(inventory)}, failures={len(failures)}',flush=True)
     paths['output_dir'].mkdir(parents=True,exist_ok=True)
     result = dict(status='pass' if not failures else 'failed',data_root=config['data_root'],
-                  bundle_sha256=sha(ROOT/'bundle_manifest.json'),calls=len(inventory),total_bytes=total,
+                  bundle_sha256=bundle_identity(),calls=len(inventory),total_bytes=total,
                   failures=failures,verification='file names, sizes and 8kHz/mono/PCM16/frame-count headers; not full waveform content hashes')
     save(paths['output_dir']/'dataset_check.json',result)
     require(not failures, f'{len(failures)} WAV failures. See dataset_check.json; no GPU work started')
@@ -237,7 +310,7 @@ def check_dataset(config):
 def require_dataset_check(config):
     result = read(Path(config['output_dir'])/'dataset_check.json')
     require(result['status']=='pass' and result['calls']==27985 and not result['failures'] and
-            result['data_root']==config['data_root'] and result['bundle_sha256']==sha(ROOT/'bundle_manifest.json'),
+            result['data_root']==config['data_root'] and result['bundle_sha256']==bundle_identity(),
             'Run run.py --worker check-data for this data path and code bundle first')
 
 
@@ -386,11 +459,11 @@ def setup(config):
     require(Path(config['data_root']).is_dir(),'Data root absent')
     m,jobs=bundle()
     packages={n:im.version(n) for n in ('torch','torchaudio','numpy','scipy','transformers','tokenizers','huggingface-hub','scikit-learn','soundfile')}
-    for line in (ROOT/'requirements.txt').read_text().splitlines():
+    for line in REQUIREMENTS:
         if '==' in line:
             name,version=line.split('==')
             require(im.version(name)==version,f'Package mismatch: {name}')
-    ident=dict(bundle_sha256=sha(ROOT/'bundle_manifest.json'), source_identity_sha256=None, input_provenance='verified bundled metadata; fresh teammate execution',
+    ident=dict(bundle_sha256=bundle_identity(), source_identity_sha256=None, input_provenance='verified bundled metadata; fresh teammate execution',
                model=MODEL,revision=REVISION,config=config,python=platform.python_version(),packages=packages,
                gpu=torch.cuda.get_device_name(0),gpu_profile=profile,cuda=torch.version.cuda,source_hashes=SOURCE_HASHES,
                inner_split_sha256=sha(ROOT/'data/inner_split.csv'),precision=config['precision'],
@@ -913,7 +986,7 @@ def verify(folder, output):
     ident=read(folder/'identity.json');ih=digest(ident)
     dataset=read(folder/'dataset_check.json')
     require(dataset['status']=='pass' and dataset['calls']==27985 and not dataset['failures'] and dataset['data_root']==ident['config']['data_root'] and dataset['bundle_sha256']==ident['bundle_sha256'],'Dataset provenance mismatch')
-    require(ident['bundle_sha256']==sha(ROOT/'bundle_manifest.json'),'Unknown code bundle')
+    require(ident['bundle_sha256']==bundle_identity(),'Unknown code bundle')
     require(ident['model']==MODEL and ident['revision']==REVISION and ident['source_hashes']==SOURCE_HASHES,'Initial model/source mismatch')
     require(ident['inner_split_sha256']==sha(ROOT/'data/inner_split.csv'),'Inner split mismatch')
     require(ident['class_order']==['F','M'] and ident['layers']==LAYERS and ident['window_seconds']==WINDOW,'Pipeline mismatch')
@@ -1002,12 +1075,11 @@ def verify_main():
 
 
 # 환경 준비·전체 실행
-# config.py의 빈 경로를 채운 뒤 python3 run.py 한 번으로 실행합니다.
-# 경로/환경 오류는 GPU 학습 전에 중단합니다. config.local.py가 있으면 우선 사용합니다.
+# 이 파일 맨 위의 빈 경로를 채운 뒤 python3 run.py 한 번으로 실행합니다.
+# 경로/환경 오류는 GPU 학습 전에 중단합니다.
 import argparse
 import contextlib
 import hashlib
-import importlib.util
 import json
 import os
 import platform
@@ -1044,14 +1116,10 @@ def command(argv, env=None, capture=False):
 
 
 def load_settings():
-    path=ROOT/'config.local.py'
-    if not path.exists():path=ROOT/'config.py'
-    spec=importlib.util.spec_from_file_location('user_settings',path)
-    c=importlib.util.module_from_spec(spec);spec.loader.exec_module(c)
     result={}
-    for key in ('INPUT_JSON','DATA_ROOT','OUTPUT_DIR','HF_CACHE_DIR','GPU_LOCK_PATH'):
-        value=getattr(c,key,None)
-        require(isinstance(value,str) and value.strip(), f'Fill {key} in {path.name}')
+    for key in SETTINGS_KEYS:
+        value=globals().get(key)
+        require(isinstance(value,str) and value.strip(), f'Fill {key} at the top of run.py')
         p=Path(value).expanduser()
         require(p.is_absolute(),f'{key} must be an absolute path')
         result[key]=str(p.resolve())
@@ -1063,7 +1131,7 @@ def load_settings():
 
 def prepare_metadata(path):
     # ZIP 대신 JSON 하나에서 입력을 복원합니다. 통화·split 정보는 동일합니다.
-    m=read(ROOT/'bundle_manifest.json')
+    m=runtime_manifest()
     require(sha(path)==m['input_json_sha256'],'Wrong input JSON; use wavlm_gender_inputs.json supplied with this code')
     package=read(path)
     require(package.get('format')=='wavlm-inputs-v1','Unsupported input format')
@@ -1094,7 +1162,7 @@ print(json.dumps(dict(gpu=torch.cuda.get_device_name(0),torch=torch.__version__,
 
 def environment(out,hardware):
     envdir=out/'.venv';python=envdir/'bin/python';marker=envdir/'.wavlm_environment.json'
-    expected=dict(base_python=str(Path(sys.executable).resolve()),torch=hardware['torch'],requirements_sha256=sha(ROOT/'requirements.txt'))
+    expected=dict(base_python=str(Path(sys.executable).resolve()),torch=hardware['torch'],requirements_sha256=digest(REQUIREMENTS))
     if envdir.exists():require(marker.is_file() and read(marker)==expected,'Existing .venv is not this experiment environment')
     else:
         command([sys.executable,'-m','venv','--system-site-packages',envdir])
@@ -1104,13 +1172,13 @@ def environment(out,hardware):
         (local/'existing_torch.pth').write_text('\n'.join(source_sites)+'\n')
         save(marker,expected)
     check="""import importlib.metadata as m,sys
-for line in open(sys.argv[1]):
+for line in sys.argv[1:]:
  if '==' in line:
   name,version=line.strip().split('=='); assert m.version(name)==version, name
 """
-    try:command([python,'-c',check,ROOT/'requirements.txt'],capture=True)
-    except RuntimeError:command([python,'-m','pip','install','--disable-pip-version-check','-r',ROOT/'requirements.txt'])
-    command([python,'-c',check,ROOT/'requirements.txt'],capture=True)
+    try:command([python,'-c',check,*REQUIREMENTS],capture=True)
+    except RuntimeError:command([python,'-m','pip','install','--disable-pip-version-check',*REQUIREMENTS])
+    command([python,'-c',check,*REQUIREMENTS],capture=True)
     require(probe(python)==hardware,'GPU/torch changed in the virtual environment')
     return python
 
@@ -1141,7 +1209,7 @@ def pipeline(python,config_path,config,stop_after_benchmark=False):
 
 
 def main():
-    parser=argparse.ArgumentParser(description='config.py 경로 설정 후 실행. 기본: frozen 특징 + LR; 입력 ZIP 불필요.')
+    parser=argparse.ArgumentParser(description='run.py 맨 위의 경로 설정 후 실행. 기본: frozen 특징 + LR; 입력 ZIP 불필요.')
     parser.add_argument('--benchmark-only',action='store_true',help='벤치마크까지만 실행')
     args=parser.parse_args()
     settings=load_settings()
