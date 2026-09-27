@@ -85,4 +85,14 @@ python -m unittest discover -s mission-3/tests -v
 먼저 오분류(특히 오심)의 텍스트와 정답 대응을 살핀다. 새 모델도 동일한 manifest를 사용하고,
 후보 선택 후 설정을 고정해 별도 평가한다. 최종 제출에는 전체 Training 재학습,
 동일한 텍스트 전처리를 쓰는 추론과 주최 측 CSV 형식 확인이 별도로 필요하다.
-미검증 제출용 추론 코드나 미실시 E4 weighted BCE 결과는 포함하지 않았다.
+미검증 제출용 추론 코드는 포함하지 않았다.
+
+## 손실함수 통제 실험 (2026-09-25)
+
+임계값 0.5 고정, 같은 초기 가중치·분할·학습 설정에서 일반 BCE와 Weighted BCE를 비교했다.
+RoBERTa 단독 Macro F1은 **0.6107 → 0.6400**, 오심 recall은 **0.1123 → 0.3608**로
+개선됐다. Weighted BCE + TF-IDF 50:50은 0.6164로 단독보다 낮았다.
+단일 seed 내부 검증 결과이며 공식 Validation 성능과 구분한다.
+
+- [결과·증상별 분석·초기화 버그 수정 기록](results/loss_control_2026-09-25/README.md)
+- [재실행 Colab 노트북](models/roberta/M3_BCE_vs_WeightedBCE_fixed05_fixed_v2.ipynb)

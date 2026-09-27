@@ -1,0 +1,20 @@
+{
+  "fixed_threshold": 0.5,
+  "fixed_threshold_macro_f1": 0.6106609155665017,
+  "head": "label_attention",
+  "loss": "b0_bce",
+  "pos_weight": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "preprocessing": "boundary",
+  "evaluation": "internal validation",
+  "selection": "final_epoch"
+}

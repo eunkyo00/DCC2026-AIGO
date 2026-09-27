@@ -1,0 +1,27 @@
+{
+  "input": "raw full text",
+  "fit_split": "train only",
+  "threshold": 0.5,
+  "analyzer": "char",
+  "ngram_range": [
+    2,
+    5
+  ],
+  "min_df": 2,
+  "max_features": 150000,
+  "sublinear_tf": true,
+  "C": 2.0,
+  "max_iter": 1000,
+  "solver": "liblinear",
+  "seed": 42,
+  "environment": {
+    "python": "3.13.15",
+    "torch": "2.11.0+cu128",
+    "transformers": "5.16.1",
+    "accelerate": "1.14.0",
+    "numpy": "2.1.3",
+    "pandas": "2.2.3",
+    "scikit-learn": "1.6.1"
+  },
+  "manifest_sha256": "69817218fd5677067294a6d65ec44a3d0b4d7d5d4690f71f6fa4eaea1cfcf64e"
+}

@@ -1,0 +1,7 @@
+{
+  "fixed_threshold": 0.5,
+  "fixed_threshold_macro_f1": 0.47057395848561395,
+  "evaluation": "internal validation",
+  "model": "TF-IDF + LR",
+  "input": "raw full text"
+}
