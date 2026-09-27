@@ -1,0 +1,27 @@
+{
+  "model": "microsoft/wavlm-large",
+  "revision": "c1423ed94bb01d80a3f5ce5bc39f6026a0f4828c",
+  "source_hashes": {
+    "validation/split_assignments.csv": "04b5018778321f775a0bf95949a37636090d4df4e3710b16627dfee309408f06",
+    "validation/manifests/calls.csv": "dc57d0f7bea6e06017ac3e27444a0ff5bb299e401ea787400e84cbdf7d072e23",
+    "eda/eda_outputs/segments.csv": "8bf8c83c0190232e4500b4067bc28d2611b09dd227a7ce4dc9c3741e6dcce584"
+  },
+  "baseline_comparison_sha256": "e4c9f2addbdbc339f34f459cc562121a8df429e761a33b7b70a18a9a6dc99081",
+  "files": {
+    "common.py": "3275fad1af43dec3cd9e83f43a0e00b23157593c66b1697c5581d230061ca2ad",
+    "audio_model.py": "f87aaeedf6d84ae70f73951d01322f5101537cac5f70f37d90151bc0168926ea",
+    "runner.py": "919ddfca24085c216f4e5f29d2f4be208556c95a14fe25c4a0abb34e9f3702b5",
+    "portable.py": "a5e5b6388d3ea4a0c3bf80dc29a9c93df32353107bccaaac0e26c267e600ab77",
+    "verify.py": "9aeca8268c307a1d44fdfc514f56e2727cb80a06186173ea566e40f9de008a12",
+    "run.py": "371942d8a47e2f6017883518999a015b4e4366d853637f1bf4a3483b00d0b6bd",
+    "requirements.txt": "bb7607b1c0364d2bbd6c2d7d58b7e328c7530e6f4463311aa659945700a377df",
+    "metadata_manifest.json": "3aa45b7e94604579c21de266b8651dcab4f1652e70a844cce51177676f9ff130",
+    "data/jobs.json": "3e4f024ad7c0e5bec8fb2c5ae9af25c467dbc78129d8286faa79a54f237c4e89",
+    "data/inner_split.csv": "b6664bee9b72dd14a53743388274577d6c5b73e5ef5f51ab4d53da6fa3321e17",
+    "data/inner_train_ids.txt": "1de6452fffaa1cbe75e0a0581ac6a989417a4acdd053b22e00e17a5a3ba724fc",
+    "data/dev_ids.txt": "8b695c719a757ed275586846fb0a9ab12003732b5e967eb58dd21c4e271e4c80",
+    "data/train_audio_review.csv": "2482439d77a9a2fd6ab81bf5e0cfeaba904da13d336a45e069f9614df11f1e53",
+    "data/baseline_predictions.csv": "e4c9f2addbdbc339f34f459cc562121a8df429e761a33b7b70a18a9a6dc99081",
+    "data/wav_inventory.csv": "ce7df76040db8075371d2160f753b8ea1da6646fb0269fd3987a6dbaac1e7bf1"
+  }
+}
