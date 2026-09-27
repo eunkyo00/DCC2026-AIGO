@@ -8,6 +8,3 @@ __pycache__/
 *.wav
 *.zip
 config.local.py
-
-# 별도로 전달하는 입력 메타데이터 (원본 음성과 함께 Git 제외)
-wavlm_gender_inputs.json
