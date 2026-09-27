@@ -1,7 +1,7 @@
 # 아래 5개 경로만 실제 서버의 절대 경로로 입력하세요.
 # 원본 WAV는 별도 준비: DATA_ROOT 바로 아래에 Training/ 폴더가 있어야 합니다.
-# INPUT_ZIP: 따로 전달받은 wavlm_gender_inputs.zip (원본 음성 미포함).
-INPUT_ZIP = ""
+# INPUT_JSON: 따로 전달받은 wavlm_gender_inputs.json (원본 음성 미포함, ZIP 불필요).
+INPUT_JSON = ""
 DATA_ROOT = ""
 OUTPUT_DIR = ""
 HF_CACHE_DIR = ""
@@ -17,3 +17,5 @@ GPU_LOCK_PATH = ""  # 같은 서버의 실험들이 공유할 잠금 파일 경�
 # 학습 checkpoint 사이의 미저장 step은 재실행 범위를 기록합니다.
 # 실제 GPU 속도/메모리는 미측정입니다. benchmark 결과를 확인하세요.
 # 실행 프로세스를 멈춰도 대여 GPU 요금은 서비스에서 별도로 정지해야 합니다.
+
+# 이전 분리형 버전에서 실행했다면 새 OUTPUT_DIR을 지정하세요. 이전 결과는 보존합니다.
