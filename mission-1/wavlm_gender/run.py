@@ -1,11 +1,14 @@
-# 아래 5개 경로만 실제 서버의 절대 경로로 입력하세요.
-# 원본 WAV는 별도 준비: DATA_ROOT 바로 아래에 Training/ 폴더가 있어야 합니다.
-# INPUT_JSON: 따로 전달받은 wavlm_gender_inputs.json (원본 음성 미포함, ZIP 불필요).
-INPUT_JSON = ""
-DATA_ROOT = ""
-OUTPUT_DIR = ""
-HF_CACHE_DIR = ""
-GPU_LOCK_PATH = ""  # 같은 서버의 실험들이 공유할 잠금 파일 경로. 부모 폴더는 미리 준비하세요.
+# 실행할 GPU 서버의 전체 경로를 입력하세요. 모두 /로 시작하며, 맥북 경로를 그대로 쓰면 안 됩니다.
+
+INPUT_JSON = ""     # 내려받은 wavlm_gender_inputs.json의 위치. 파일명까지 입력하세요.
+DATA_ROOT = ""      # 원본 음성 폴더 위치. 바로 아래에 Training/ 폴더가 있어야 합니다.
+OUTPUT_DIR = ""     # 학습 결과와 중간 저장 파일을 담을 새 폴더 위치. 자동으로 생성합니다.
+HF_CACHE_DIR = ""   # 내려받는 WavLM 모델을 저장할 폴더 위치. 자동으로 생성합니다.
+GPU_LOCK_PATH = ""  # GPU 중복 실행을 막는 잠금 파일 위치. 파일명까지 입력하세요.
+
+# 결과·모델 폴더는 서로 분리하고, 원본 음성·코드 폴더 바깥에 두세요.
+# 잠금 파일도 위 폴더들 바깥에 지정하세요. 부모 폴더는 미리 만들고, 파일 자체는 코드가 만듭니다.
+# 같은 GPU를 사용하는 실험끼리는 동일한 잠금 파일 경로를 사용하세요.
 
 # Linux / Python 3.12 / 정상 CUDA torch+torchaudio 환경에서 실행하세요.
 # L4는 BF16, T4는 FP32를 자동 선택합니다. GPU 두 종류만 지원합니다.
