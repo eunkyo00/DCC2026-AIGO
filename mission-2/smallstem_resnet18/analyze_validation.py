@@ -51,7 +51,7 @@ def main() -> None:
 
     actual_labels = []
     predicted = []
-    threshold = float(checkpoint.get("threshold", 0.5))
+    threshold = 0.5  # 대회 규정: 임계값 탐색 및 저장된 튜닝 값 사용 금지.
     loader = DataLoader(dataset, batch_size=512, shuffle=False, num_workers=0)
     with torch.inference_mode():
         for features, labels in loader:
