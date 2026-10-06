@@ -1,0 +1,21 @@
+{
+  "fixed_threshold": 0.5,
+  "fixed_threshold_macro_f1": 0.6401016215864825,
+  "head": "label_attention",
+  "loss": "weighted_bce",
+  "experiment": "w1_targeted_low_recall_x125",
+  "pos_weight": [
+    2.1544933319091797,
+    2.3572998046875,
+    3.75,
+    1.8224190473556519,
+    1.9025498628616333,
+    2.7284510135650635,
+    3.48146915435791,
+    2.65470027923584,
+    2.539691209793091
+  ],
+  "preprocessing": "boundary",
+  "evaluation": "internal validation",
+  "selection": "final_epoch"
+}

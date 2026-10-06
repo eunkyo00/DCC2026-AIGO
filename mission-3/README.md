@@ -105,3 +105,13 @@ First-512 재학습 0.6387보다 0.00046 낮았고, 512토큰 초과 통화 313�
 
 - [결과 보고서·증상별 분석](results/context_control_2026-10-06/README.md)
 - [재실행 Colab 노트북](models/roberta/M3_WeightedBCE_First512_vs_HeadTail_fixed05.ipynb)
+
+## 낮은 recall 증상 가중치 통제 실험 (2026-10-07)
+
+현재 Weighted BCE 대비 두통·오심·전신쇠약 양성 가중치만 1.25배 올려 비교했다.
+Macro F1은 0.63845에서 0.64010으로 소폭 상승했지만, 두통과 전신쇠약 F1은 하락했다.
+오심 recall은 0.3728에서 0.4431로 높아졌고 오탐도 증가했다. 이전 최고 기록
+0.64002와는 사실상 동률에 가까워 여러 seed 재현 확인이 필요하다.
+
+- [결과 보고서·증상별 지표](results/targeted_weight_2026-10-07/README.md)
+- [재실행 Colab 노트북](models/roberta/M3_WeightedBCE_TargetedLowRecallWeights_fixed05.ipynb)
