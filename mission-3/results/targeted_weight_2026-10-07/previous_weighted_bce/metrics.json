@@ -1,0 +1,6 @@
+{
+  "fixed_threshold": 0.5,
+  "fixed_threshold_macro_f1": 0.6400217025853308,
+  "evaluation": "internal validation",
+  "source": "previous weighted BCE First-512"
+}
