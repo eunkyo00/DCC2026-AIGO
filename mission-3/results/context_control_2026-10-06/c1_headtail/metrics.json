@@ -1,0 +1,22 @@
+{
+  "fixed_threshold": 0.5,
+  "fixed_threshold_macro_f1": 0.6382188032310092,
+  "head": "label_attention",
+  "loss": "weighted_bce",
+  "experiment": "c1_headtail",
+  "pos_weight": [
+    2.1544933319091797,
+    2.3572998046875,
+    3.0,
+    1.8224190473556519,
+    1.9025498628616333,
+    2.7284510135650635,
+    2.785175323486328,
+    2.123760223388672,
+    2.539691209793091
+  ],
+  "preprocessing": "boundary",
+  "input": "headtail",
+  "evaluation": "internal validation",
+  "selection": "final_epoch"
+}
