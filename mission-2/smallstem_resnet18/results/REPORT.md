@@ -1,5 +1,7 @@
 # Small-stem ResNet18 — Validation 결과 보고서
 
+> 과거 임계값 튜닝 실험의 원본 기록이다. 현재 규정은 0.5 고정이므로 0.535 결과는 제출 기준 성능이 아니다. 현재 코드는 학습 선택·평가·추론 모두 0.5를 적용한다. 원본 JSON 로그는 수정하지 않았다.
+
 ## 결과 출처와 검증 범위
 
 사용자가 제공한 `mission02_experiment_smallstem-20260919T042641Z-1-001.zip`의 `history.json`, `best_model.pt`를 대조했다. ZIP 무결성을 확인하고 체크포인트의 모델 가중치를 현재 `model.py`에 strict loading했으며 `[1,1,64,24]` 입력 forward 연산을 확인했다. **원본 Validation 음성으로 독립 추론을 재실행한 것은 아니다.**

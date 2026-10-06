@@ -82,7 +82,7 @@ def main() -> None:
     )
     model.load_state_dict(checkpoint["model_state_dict"], strict=True)
     model.to(device).eval()
-    threshold = float(checkpoint.get("threshold", 0.5))
+    threshold = 0.5  # 저장된 과거 튜닝 임계값을 사용하지 않는다.
 
     wav_index = index_files(args.audio_dir, ".wav")
     json_index = index_files(args.label_dir, ".json")

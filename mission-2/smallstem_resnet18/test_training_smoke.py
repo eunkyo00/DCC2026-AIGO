@@ -57,10 +57,21 @@ class TrainingSmokeTest(unittest.TestCase):
             checkpoint = torch.load(output / "best_model.pt", map_location="cpu", weights_only=True)
             self.assertEqual(checkpoint["feature_variant"], "first_plus_whole")
             self.assertEqual(checkpoint["validation"]["samples"], 4)
+            self.assertEqual(checkpoint["threshold"], 0.5)
+            self.assertEqual(checkpoint["selection_policy"], "accuracy_at_fixed_0.5")
+            self.assertNotIn("accuracy_tuned", checkpoint["validation"])
 
             second = subprocess.run(cmd, capture_output=True, text=True, timeout=120, env=env)
             self.assertEqual(second.returncode, 0, second.stdout + second.stderr)
             self.assertIn("completed_epoch=1", second.stdout)
+
+            last_path = output / "last_checkpoint.pt"
+            state = torch.load(last_path, map_location="cpu", weights_only=True)
+            del state["selection_policy"]
+            torch.save(state, last_path)
+            legacy = subprocess.run(cmd, capture_output=True, text=True, timeout=120, env=env)
+            self.assertNotEqual(legacy.returncode, 0)
+            self.assertIn("이전 임계값 튜닝 실행은 재개할 수 없습니다", legacy.stderr)
 
             fine_tune_cmd = list(cmd)
             fine_tune_cmd[fine_tune_cmd.index("--output-dir") + 1] = str(root / "fine_tune")

@@ -47,7 +47,7 @@ class InferenceMultiViewTest(unittest.TestCase):
             checkpoint = root / "best_model.pt"
             torch.save({
                 "model_state_dict": model.state_dict(), "model_name": "resnet18_smallstem",
-                "feature_variant": "first_plus_whole", "dropout": 0.3, "threshold": 0.5,
+                "feature_variant": "first_plus_whole", "dropout": 0.3, "threshold": 0.99,
             }, checkpoint)
             output = root / "mission2.csv"
             with mock.patch("multiview_preprocessing.extract_melspectrogram", side_effect=fake_mel):
@@ -55,8 +55,9 @@ class InferenceMultiViewTest(unittest.TestCase):
                     "inference.py", "--audio_dir", str(audio), "--label_dir", str(labels),
                     "--ckpt_path", str(checkpoint), "--output", str(output),
                 ]):
-                    with contextlib.redirect_stdout(io.StringIO()):
+                    with contextlib.redirect_stdout(io.StringIO()) as captured:
                         inference.main()
+                    self.assertIn("threshold=0.500", captured.getvalue())
             with output.open(encoding="utf-8-sig", newline="") as handle:
                 reader = csv.DictReader(handle)
                 rows = list(reader)
