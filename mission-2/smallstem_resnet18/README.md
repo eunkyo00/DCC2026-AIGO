@@ -1,6 +1,6 @@
 # Mission 2 — Small-stem ResNet18
 
-> 이 폴더는 앞 1.5초 특징을 사용하는 **초기 90.248957% 단독 모델**의 재현 기록이다. 현재 유지하는 모델은 `first_plus_whole`을 사용하는 **ResNet18+34 결합, Accuracy 91.437%**이며 [Mission 2 개요](../README.md)와 [최신 결과 보고서](../results/resnet_ensemble_91_437.md)를 참고한다. 이 폴더의 단일 모델 실행 명령으로 최신 결합 성능이 자동 재현되는 것은 아니다.
+> 이 폴더는 앞 1.5초 특징을 사용하는 **초기 90.248957% 단독 모델**의 재현 기록이다. 현재 유지하는 모델은 `first_plus_whole`을 사용하는 **ResNet18+34 결합, Accuracy 91.419%**이며 [Mission 2 개요](../README.md)와 [최신 결과 보고서](../results/resnet_ensemble_fixed_05.md)를 참고한다. 이 폴더의 단일 모델 실행 명령으로 최신 결합 성능이 자동 재현되는 것은 아니다.
 
 ## 1. 실험 한눈에 보기
 
@@ -8,7 +8,7 @@
 
 ```text
 한 발화의 WAV → 앞 1.5초 64-band log-Mel → Small-stem ResNet18
-    → 신고자 확률 → 저장된 threshold → speaker 0/1
+    → 신고자 확률 → 고정 threshold 0.5 → speaker 0/1
 ```
 
 ## 2. 데이터와 전처리
@@ -86,7 +86,11 @@ python inference.py \
   --output "/path/to/outputs/mission2.csv"
 ```
 
-출력 컬럼은 `audio file name,startAt,endAt,speaker`다. 추론 시 JSON에서 발화의 `startAt`·`endAt`만 읽고 `speaker`·`text`는 읽지 않는다. 전처리 종류, 모델명, threshold는 체크포인트에 기록된 값을 사용한다.
+출력 컬럼은 `audio file name,startAt,endAt,speaker`다. 추론 시 JSON에서 발화의 `startAt`·`endAt`만 읽고 `speaker`·`text`는 읽지 않는다. 전처리 종류와 모델명은 체크포인트에서 읽지만 **threshold는 저장값과 관계없이 0.5**로 고정한다.
+
+### 2026-10-06 규정 반영
+
+현재 학습 코드는 임계값 탐색을 제거하고 Accuracy@0.5로 best epoch와 early stopping을 결정한다. 과거 튜닝 실행의 `--resume`은 거부한다. 새 output-dir에서 실행해야 하며, 과거 가중치를 초기값으로 사용하는 것은 과거 모델 선택 이력을 없애지 않는다. `results/`와 `verify_results.py`는 원본 과거 실험 기록·일치 검사이며 현재 제출 성능 검증이 아니다. 과거 0.535의 90.248957% 대신, 같은 체크포인트의 0.5 결과는 90.139977%다.
 
 ## 7. 파일과 한계
 

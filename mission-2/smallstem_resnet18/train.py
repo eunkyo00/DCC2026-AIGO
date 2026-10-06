@@ -55,16 +55,6 @@ def accuracy_at_threshold(labels: np.ndarray, probabilities: np.ndarray, thresho
     return float(np.mean((probabilities >= threshold).astype(np.int64) == labels))
 
 
-def find_best_threshold(labels: np.ndarray, probabilities: np.ndarray) -> tuple[float, float]:
-    thresholds = np.arange(0.20, 0.801, 0.005)
-    scores = np.asarray([accuracy_at_threshold(labels, probabilities, float(value)) for value in thresholds])
-    best_score = scores.max()
-    # 동률이면 과도한 threshold 이동을 피하기 위해 0.5에 가장 가까운 값을 선택한다.
-    candidates = thresholds[np.isclose(scores, best_score)]
-    best_threshold = float(candidates[np.argmin(np.abs(candidates - 0.5))])
-    return best_threshold, float(best_score)
-
-
 @torch.inference_mode()
 def evaluate(model: nn.Module, loader: DataLoader, device: torch.device, criterion: nn.Module) -> dict:
     model.eval()
@@ -84,7 +74,7 @@ def evaluate(model: nn.Module, loader: DataLoader, device: torch.device, criteri
 
     y_true = np.concatenate(all_labels)
     probabilities = np.concatenate(all_probabilities)
-    threshold, tuned_accuracy = find_best_threshold(y_true, probabilities)
+    threshold = 0.5  # 대회 규정: Train/Validation/추론 모두 고정.
     default_accuracy = accuracy_at_threshold(y_true, probabilities, 0.5)
     predictions = (probabilities >= threshold).astype(np.int64)
     confusion = [[int(np.sum((y_true == truth) & (predictions == pred))) for pred in (0, 1)] for truth in (0, 1)]
@@ -92,7 +82,6 @@ def evaluate(model: nn.Module, loader: DataLoader, device: torch.device, criteri
     return {
         "loss": sum(losses) / len(y_true),
         "accuracy_0.5": default_accuracy,
-        "accuracy_tuned": tuned_accuracy,
         "threshold": threshold,
         "confusion_matrix": confusion,
         "samples": int(len(y_true)),
@@ -203,6 +192,8 @@ def main() -> None:
 
     if args.resume and last_checkpoint_path.is_file():
         resume_state = torch.load(last_checkpoint_path, map_location="cpu")
+        if resume_state.get("selection_policy") != "accuracy_at_fixed_0.5":
+            raise ValueError("이전 임계값 튜닝 실행은 재개할 수 없습니다. 새 output-dir에서 고정 0.5 학습을 시작하세요.")
         saved_model_name = str(resume_state.get("model_name", "resnet18"))
         if saved_model_name != args.model_name:
             raise ValueError(
@@ -262,7 +253,7 @@ def main() -> None:
             batch_size = len(labels)
             running_loss += float(loss.item()) * batch_size
             seen += batch_size
-            correct += int((logits.argmax(dim=1) == labels).sum().item())
+            correct += int(((logits.softmax(dim=1)[:, 1] >= 0.5).long() == labels).sum().item())
 
         validation = evaluate(model, valid_loader, device, criterion)
         scheduler.step()
@@ -278,14 +269,15 @@ def main() -> None:
         atomic_write_json(args.output_dir / "history.json", history)
         print(json.dumps(row, ensure_ascii=False))
 
-        if validation["accuracy_tuned"] > best_accuracy:
-            best_accuracy = validation["accuracy_tuned"]
+        if validation["accuracy_0.5"] > best_accuracy:
+            best_accuracy = validation["accuracy_0.5"]
             epochs_without_improvement = 0
             atomic_torch_save(
                 checkpoint_path,
                 {
                     "model_state_dict": model.state_dict(),
                     "threshold": validation["threshold"],
+                    "selection_policy": "accuracy_at_fixed_0.5",
                     "validation": validation,
                     "epoch": epoch,
                     "model_name": args.model_name,
@@ -314,6 +306,7 @@ def main() -> None:
                 "scheduler_state_dict": scheduler.state_dict(),
                 "scaler_state_dict": scaler.state_dict(),
                 "best_accuracy": best_accuracy,
+                "selection_policy": "accuracy_at_fixed_0.5",
                 "epochs_without_improvement": epochs_without_improvement,
                 "history": history,
                 "input_source": input_source,
