@@ -1,0 +1,21 @@
+{
+  "scope": "Train 2000-call screen only",
+  "split_sha256": "04b5018778321f775a0bf95949a37636090d4df4e3710b16627dfee309408f06",
+  "sample_seed": 42,
+  "calls": 2000,
+  "gender_counts": {
+    "M": 936,
+    "F": 1064
+  },
+  "caller_segments": 31269,
+  "files": {
+    "compare_models.py": "f2f125bff5e013734e5705793bda50c06211f78d71aff9fa997513514198476a",
+    "requirements.txt": "531400734beb0bdfce8486cc1148d902e5fd9784c232f84bd756064e7d2a7e7c",
+    "model_sources.json": "8e79be2e0ebf13b43f9e3698ccefeaf8a36409f11ee8171712aeacf65a490067",
+    "data/jobs.json": "88712f2b065cbfe1abd05c497e6434739b650684495c9d4509ae5879cf54cd29",
+    "vendor/ecapa_LICENSE": "c28e50e8399aae34896cbbf1947066828aea1853088e91f351477ed04f9986ce",
+    "vendor/ecapa_model.py": "fb9f21d3cd89977decc427b7d29bf02dccecef202ca8badeb7efdc44c59c24f9",
+    "vendor/wavlm_LICENSE": "c1cc6b4b712ef01bacadf11552657454e9fa94183796b50f7c7a32f7438d62c6",
+    "vendor/wavlm_model.py": "eb05a7b6a80aeb4dd8194ae05afc494c4d8bd514737573534e2e023f1ef4cf91"
+  }
+}

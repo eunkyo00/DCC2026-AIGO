@@ -96,3 +96,12 @@ RoBERTa 단독 Macro F1은 **0.6107 → 0.6400**, 오심 recall은 **0.1123 → 
 
 - [결과·증상별 분석·초기화 버그 수정 기록](results/loss_control_2026-09-25/README.md)
 - [재실행 Colab 노트북](models/roberta/M3_BCE_vs_WeightedBCE_fixed05_fixed_v2.ipynb)
+
+## 문맥 토큰 선택 통제 실험 (2026-10-06)
+
+Weighted BCE 설정에서 First-512와 Head-Tail을 비교했다. Head-Tail의 Macro F1은 0.6382로
+First-512 재학습 0.6387보다 0.00046 낮았고, 512토큰 초과 통화 313건에서는 0.6520에서
+0.6276으로 하락했다. 현재 기준 입력은 First-512로 유지한다.
+
+- [결과 보고서·증상별 분석](results/context_control_2026-10-06/README.md)
+- [재실행 Colab 노트북](models/roberta/M3_WeightedBCE_First512_vs_HeadTail_fixed05.ipynb)

@@ -1,0 +1,12 @@
+artifacts/
+results/
+data/
+*.npz
+*.joblib
+
+# Generated Validation metadata and per-call exports
+validation_data/
+validation_results/*
+!validation_results/metrics.json
+!validation_results/REPORT.md
+!validation_results/verification_provenance.json

@@ -1,0 +1,92 @@
+{
+  "status": "independently_verified_locally",
+  "scope": "Previously observed fixed Internal Validation; not a new independent test",
+  "split_sha256": "04b5018778321f775a0bf95949a37636090d4df4e3710b16627dfee309408f06",
+  "identity_sha256": "bfdd86a00116f918f3ac73e8e9a1c5e52a2ebf4edc43b5c1bfc75752ab9c4da8",
+  "cache_sha256": "6efe706b9a19641cdc817746b909ed64f9fb1176c055dddb33c9df1d2d0a1512",
+  "ecapa": {
+    "calls": 5597,
+    "correct": 5419,
+    "wrong": 178,
+    "accuracy": 0.9681972485259961,
+    "confusion_matrix_M_F": [
+      [
+        2563,
+        57
+      ],
+      [
+        121,
+        2856
+      ]
+    ],
+    "gender_accuracy": {
+      "M": 0.9782442748091603,
+      "F": 0.9593550554249244
+    }
+  },
+  "baselines": {
+    "mfcc": {
+      "calls": 5597,
+      "correct": 5321,
+      "wrong": 276,
+      "accuracy": 0.9506878685009826,
+      "confusion_matrix_M_F": [
+        [
+          2484,
+          136
+        ],
+        [
+          140,
+          2837
+        ]
+      ],
+      "gender_accuracy": {
+        "M": 0.9480916030534351,
+        "F": 0.952972791400739
+      }
+    },
+    "wav2vec2": {
+      "calls": 5597,
+      "correct": 5443,
+      "wrong": 154,
+      "accuracy": 0.9724852599606932,
+      "confusion_matrix_M_F": [
+        [
+          2535,
+          85
+        ],
+        [
+          69,
+          2908
+        ]
+      ],
+      "gender_accuracy": {
+        "M": 0.9675572519083969,
+        "F": 0.9768223043332214
+      }
+    }
+  },
+  "versus_baselines": {
+    "mfcc": {
+      "corrected": 204,
+      "regressed": 106,
+      "both_wrong": 72,
+      "both_correct": 5215
+    },
+    "wav2vec2": {
+      "corrected": 83,
+      "regressed": 107,
+      "both_wrong": 71,
+      "both_correct": 5336
+    }
+  },
+  "reached_99_percent": false,
+  "correct_needed_for_99": 123,
+  "historical_failure_attempts": 0,
+  "unresolved_failures": 0,
+  "runtime": {
+    "gpu": "NVIDIA L4",
+    "calls_in_session": 5597,
+    "inference_and_drive_wall_seconds": 7720.671009249
+  }
+}

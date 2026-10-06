@@ -1,0 +1,12 @@
+{
+  "wavlm": {
+    "url": "https://raw.githubusercontent.com/tiantiaf0627/vox-profile-release/85100e60844a3f324a139e24fb9225aa6d8e45d1/src/model/age_sex/wavlm_demographics.py",
+    "original_sha256": "7c3bf58215d533dd9b9b39dc41335a797d2adb8710aff8f68633095625d2b9d5",
+    "adapted_sha256": "eb05a7b6a80aeb4dd8194ae05afc494c4d8bd514737573534e2e023f1ef4cf91"
+  },
+  "ecapa": {
+    "url": "https://raw.githubusercontent.com/JaesungHuh/voice-gender-classifier/49bcbecfd929ba5a043bde645fdff1a375eb79c7/model.py",
+    "original_sha256": "fb9f21d3cd89977decc427b7d29bf02dccecef202ca8badeb7efdc44c59c24f9",
+    "adapted_sha256": "fb9f21d3cd89977decc427b7d29bf02dccecef202ca8badeb7efdc44c59c24f9"
+  }
+}

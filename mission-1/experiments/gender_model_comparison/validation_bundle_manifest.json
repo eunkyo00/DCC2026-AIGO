@@ -1,0 +1,75 @@
+{
+  "scope": "Fixed Internal Validation; ECAPA only; no training or tuning",
+  "sources": {
+    "validation/split_assignments.csv": "04b5018778321f775a0bf95949a37636090d4df4e3710b16627dfee309408f06",
+    "validation/manifests/calls.csv": "dc57d0f7bea6e06017ac3e27444a0ff5bb299e401ea787400e84cbdf7d072e23",
+    "eda/eda_outputs/segments.csv": "8bf8c83c0190232e4500b4067bc28d2611b09dd227a7ce4dc9c3741e6dcce584"
+  },
+  "original_bundle_sha256": "158896cd29c0897730db06f11f0458fa8459e1ed8fbe39482e1b3a60ced51fb2",
+  "calls": 5597,
+  "gender_counts": {
+    "M": 2620,
+    "F": 2977
+  },
+  "caller_segments": 88290,
+  "caller_audio_seconds": 187393.638,
+  "windows": 15347,
+  "short_padded_calls": 1,
+  "baselines": {
+    "mfcc": {
+      "path": "baseline/mfcc_svm/results/val_predictions.csv",
+      "sha256": "fcc0347209fb4289d2ef8dfe9d57e4d4b39e0385d16ee8d8fa018a5b491b63ff",
+      "calls": 5597,
+      "correct": 5321,
+      "wrong": 276,
+      "accuracy": 0.9506878685009826,
+      "confusion_matrix_M_F": [
+        [
+          2484,
+          136
+        ],
+        [
+          140,
+          2837
+        ]
+      ],
+      "gender_accuracy": {
+        "M": 0.9480916030534351,
+        "F": 0.952972791400739
+      }
+    },
+    "wav2vec2": {
+      "path": "ssl/wav2vec2_frozen/results/full_l4/val_predictions.csv",
+      "sha256": "06a4c535ebe15b31fce9a00872933e9ad06f196147fe31df73c8e6343c172203",
+      "calls": 5597,
+      "correct": 5443,
+      "wrong": 154,
+      "accuracy": 0.9724852599606932,
+      "confusion_matrix_M_F": [
+        [
+          2535,
+          85
+        ],
+        [
+          69,
+          2908
+        ]
+      ],
+      "gender_accuracy": {
+        "M": 0.9675572519083969,
+        "F": 0.9768223043332214
+      }
+    }
+  },
+  "files": {
+    "compare_models.py": "f2f125bff5e013734e5705793bda50c06211f78d71aff9fa997513514198476a",
+    "validation_common.py": "fad5320eacb49f1811edc4b245e1e43cf2645c673336779140aeadcc15764a46",
+    "ecapa_validation.py": "984da33b5e815caf25e92842e65b218d0bb61841f0f2efd3eaed8db2d0a1cb37",
+    "analyze_ecapa_validation.py": "6dd8c5b646ed196ede295ca914d73a5677aa88d433cdcf6664c8c4f53901f2f3",
+    "model_sources.json": "8e79be2e0ebf13b43f9e3698ccefeaf8a36409f11ee8171712aeacf65a490067",
+    "requirements.txt": "531400734beb0bdfce8486cc1148d902e5fd9784c232f84bd756064e7d2a7e7c",
+    "vendor/ecapa_model.py": "fb9f21d3cd89977decc427b7d29bf02dccecef202ca8badeb7efdc44c59c24f9",
+    "vendor/ecapa_LICENSE": "c28e50e8399aae34896cbbf1947066828aea1853088e91f351477ed04f9986ce",
+    "validation_data/jobs.json": "7ee83dea1b6ab8bf3e2d148f5f32c3769f13eeae42997174f44e713a6d7831d4"
+  }
+}

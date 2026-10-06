@@ -1,0 +1,8 @@
+{
+  "result_zip_sha256": "2a26d6d23a15d182c9e7fbf7085a0eb6a4bf409f0bb2e6b7b7aad67bc835271e",
+  "executed_manifest_sha256": "c99ad25ddcf0612b5e311509dfc84cf6d878cd51a0955ec92ce406f6ebadb1cd",
+  "executed_runner_sha256": "fab54238dea2d933c1cad6a2902889dcd3fc13cc5be61dfae7994b469b358457",
+  "all_executed_file_hashes_verified": true,
+  "change": "Only package mismatch error detail changed after upload; exact prior runner reconstructed and hash-verified.",
+  "reference_bundle": "artifacts/executed_ecapa_validation_bundle.zip"
+}

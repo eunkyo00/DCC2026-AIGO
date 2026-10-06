@@ -1,0 +1,617 @@
+{
+  "scope": "Train OOF only; descriptive post-selection analysis",
+  "train_calls": 22388,
+  "validated_folds": 24,
+  "validation_evaluated": false,
+  "audio_listened": false,
+  "inputs": {
+    "split_assignments.csv": "04b5018778321f775a0bf95949a37636090d4df4e3710b16627dfee309408f06",
+    "call_features.csv": "d8581dd6264e5f1ff8f0a3a4fbb9f0674227aa62c4b678ebed2c5a40d49d3580",
+    "calls.csv": "dc57d0f7bea6e06017ac3e27444a0ff5bb299e401ea787400e84cbdf7d072e23"
+  },
+  "analysis_code_sha256": "4dd96de313f837981c448da3edb0d98d6c1132b6804706bd3773102786faa49d",
+  "candidate_stats": {
+    "lr_C1": {
+      "errors": 650,
+      "pooled_oof_accuracy": 0.970966589244238,
+      "confusion_matrix_M_F": [
+        [
+          10148,
+          332
+        ],
+        [
+          318,
+          11590
+        ]
+      ]
+    },
+    "lr_C0.1": {
+      "errors": 605,
+      "pooled_oof_accuracy": 0.9729765946042522,
+      "confusion_matrix_M_F": [
+        [
+          10164,
+          316
+        ],
+        [
+          289,
+          11619
+        ]
+      ]
+    },
+    "lr_C10": {
+      "errors": 749,
+      "pooled_oof_accuracy": 0.9665445774522066,
+      "confusion_matrix_M_F": [
+        [
+          10104,
+          376
+        ],
+        [
+          373,
+          11535
+        ]
+      ]
+    },
+    "fusion_C1": {
+      "errors": 623,
+      "pooled_oof_accuracy": 0.9721725924602466,
+      "confusion_matrix_M_F": [
+        [
+          10166,
+          314
+        ],
+        [
+          309,
+          11599
+        ]
+      ]
+    },
+    "fusion_C0.1": {
+      "errors": 570,
+      "pooled_oof_accuracy": 0.9745399321064856,
+      "confusion_matrix_M_F": [
+        [
+          10190,
+          290
+        ],
+        [
+          280,
+          11628
+        ]
+      ]
+    },
+    "fusion_C10": {
+      "errors": 769,
+      "pooled_oof_accuracy": 0.9656512417366446,
+      "confusion_matrix_M_F": [
+        [
+          10093,
+          387
+        ],
+        [
+          382,
+          11526
+        ]
+      ]
+    },
+    "svm_C1": {
+      "errors": 747,
+      "pooled_oof_accuracy": 0.9666339110237627,
+      "confusion_matrix_M_F": [
+        [
+          10061,
+          419
+        ],
+        [
+          328,
+          11580
+        ]
+      ]
+    },
+    "svm_C10": {
+      "errors": 749,
+      "pooled_oof_accuracy": 0.9665445774522066,
+      "confusion_matrix_M_F": [
+        [
+          10090,
+          390
+        ],
+        [
+          359,
+          11549
+        ]
+      ]
+    }
+  },
+  "baseline_to_fusion": {
+    "both_correct": 21644,
+    "corrected": 174,
+    "regressed": 94,
+    "both_wrong": 476
+  },
+  "tuned_lr_to_fusion": {
+    "both_correct": 21722,
+    "corrected": 96,
+    "regressed": 61,
+    "both_wrong": 509
+  },
+  "all_8_wrong": 298,
+  "fusion_errors_corrected_by_any_svm": 175,
+  "groups": {
+    "all": {
+      "calls": 22388,
+      "errors": 570,
+      "error_rate": 0.025460067893514383,
+      "share_of_errors": 1.0,
+      "by_gender": {
+        "M": {
+          "calls": 10480,
+          "errors": 290
+        },
+        "F": {
+          "calls": 11908,
+          "errors": 280
+        }
+      }
+    },
+    "Male": {
+      "calls": 10480,
+      "errors": 290,
+      "error_rate": 0.02767175572519084,
+      "share_of_errors": 0.5087719298245614,
+      "by_gender": {
+        "M": {
+          "calls": 10480,
+          "errors": 290
+        },
+        "F": {
+          "calls": 0,
+          "errors": 0
+        }
+      }
+    },
+    "Female": {
+      "calls": 11908,
+      "errors": 280,
+      "error_rate": 0.0235136042996305,
+      "share_of_errors": 0.49122807017543857,
+      "by_gender": {
+        "M": {
+          "calls": 0,
+          "errors": 0
+        },
+        "F": {
+          "calls": 11908,
+          "errors": 280
+        }
+      }
+    },
+    "duration_lt8": {
+      "calls": 108,
+      "errors": 4,
+      "error_rate": 0.037037037037037035,
+      "share_of_errors": 0.007017543859649123,
+      "by_gender": {
+        "M": {
+          "calls": 60,
+          "errors": 4
+        },
+        "F": {
+          "calls": 48,
+          "errors": 0
+        }
+      }
+    },
+    "duration_8_20": {
+      "calls": 3585,
+      "errors": 105,
+      "error_rate": 0.029288702928870293,
+      "share_of_errors": 0.18421052631578946,
+      "by_gender": {
+        "M": {
+          "calls": 1973,
+          "errors": 51
+        },
+        "F": {
+          "calls": 1612,
+          "errors": 54
+        }
+      }
+    },
+    "duration_20_40": {
+      "calls": 12631,
+      "errors": 297,
+      "error_rate": 0.023513577705644842,
+      "share_of_errors": 0.5210526315789473,
+      "by_gender": {
+        "M": {
+          "calls": 5889,
+          "errors": 153
+        },
+        "F": {
+          "calls": 6742,
+          "errors": 144
+        }
+      }
+    },
+    "duration_ge40": {
+      "calls": 6064,
+      "errors": 164,
+      "error_rate": 0.02704485488126649,
+      "share_of_errors": 0.28771929824561404,
+      "by_gender": {
+        "M": {
+          "calls": 2558,
+          "errors": 82
+        },
+        "F": {
+          "calls": 3506,
+          "errors": 82
+        }
+      }
+    },
+    "segments_le5": {
+      "calls": 138,
+      "errors": 2,
+      "error_rate": 0.014492753623188406,
+      "share_of_errors": 0.0035087719298245615,
+      "by_gender": {
+        "M": {
+          "calls": 71,
+          "errors": 2
+        },
+        "F": {
+          "calls": 67,
+          "errors": 0
+        }
+      }
+    },
+    "segments_6_15": {
+      "calls": 12276,
+      "errors": 271,
+      "error_rate": 0.022075594656239816,
+      "share_of_errors": 0.47543859649122805,
+      "by_gender": {
+        "M": {
+          "calls": 5945,
+          "errors": 134
+        },
+        "F": {
+          "calls": 6331,
+          "errors": 137
+        }
+      }
+    },
+    "segments_ge16": {
+      "calls": 9974,
+      "errors": 297,
+      "error_rate": 0.029777421295367958,
+      "share_of_errors": 0.5210526315789473,
+      "by_gender": {
+        "M": {
+          "calls": 4464,
+          "errors": 154
+        },
+        "F": {
+          "calls": 5510,
+          "errors": 143
+        }
+      }
+    },
+    "mean_silence_lt0.1": {
+      "calls": 19898,
+      "errors": 500,
+      "error_rate": 0.0251281535832747,
+      "share_of_errors": 0.8771929824561403,
+      "by_gender": {
+        "M": {
+          "calls": 9223,
+          "errors": 260
+        },
+        "F": {
+          "calls": 10675,
+          "errors": 240
+        }
+      }
+    },
+    "mean_silence_0.1_0.5": {
+      "calls": 2490,
+      "errors": 70,
+      "error_rate": 0.028112449799196786,
+      "share_of_errors": 0.12280701754385964,
+      "by_gender": {
+        "M": {
+          "calls": 1257,
+          "errors": 30
+        },
+        "F": {
+          "calls": 1233,
+          "errors": 40
+        }
+      }
+    },
+    "mean_silence_ge0.5": {
+      "calls": 0,
+      "errors": 0,
+      "error_rate": null,
+      "share_of_errors": 0.0,
+      "by_gender": {
+        "M": {
+          "calls": 0,
+          "errors": 0
+        },
+        "F": {
+          "calls": 0,
+          "errors": 0
+        }
+      }
+    },
+    "any_high_silence": {
+      "calls": 537,
+      "errors": 19,
+      "error_rate": 0.035381750465549346,
+      "share_of_errors": 0.03333333333333333,
+      "by_gender": {
+        "M": {
+          "calls": 271,
+          "errors": 9
+        },
+        "F": {
+          "calls": 266,
+          "errors": 10
+        }
+      }
+    },
+    "no_high_silence": {
+      "calls": 21851,
+      "errors": 551,
+      "error_rate": 0.025216237243146766,
+      "share_of_errors": 0.9666666666666667,
+      "by_gender": {
+        "M": {
+          "calls": 10209,
+          "errors": 281
+        },
+        "F": {
+          "calls": 11642,
+          "errors": 270
+        }
+      }
+    },
+    "any_very_short_segment": {
+      "calls": 1,
+      "errors": 0,
+      "error_rate": 0.0,
+      "share_of_errors": 0.0,
+      "by_gender": {
+        "M": {
+          "calls": 0,
+          "errors": 0
+        },
+        "F": {
+          "calls": 1,
+          "errors": 0
+        }
+      }
+    },
+    "no_very_short_segment": {
+      "calls": 22387,
+      "errors": 570,
+      "error_rate": 0.025461205163711084,
+      "share_of_errors": 1.0,
+      "by_gender": {
+        "M": {
+          "calls": 10480,
+          "errors": 290
+        },
+        "F": {
+          "calls": 11907,
+          "errors": 280
+        }
+      }
+    },
+    "reliable_f0_lt0.5": {
+      "calls": 20,
+      "errors": 1,
+      "error_rate": 0.05,
+      "share_of_errors": 0.0017543859649122807,
+      "by_gender": {
+        "M": {
+          "calls": 7,
+          "errors": 0
+        },
+        "F": {
+          "calls": 13,
+          "errors": 1
+        }
+      }
+    },
+    "reliable_f0_ge0.5": {
+      "calls": 22368,
+      "errors": 569,
+      "error_rate": 0.025438125894134477,
+      "share_of_errors": 0.9982456140350877,
+      "by_gender": {
+        "M": {
+          "calls": 10473,
+          "errors": 290
+        },
+        "F": {
+          "calls": 11895,
+          "errors": 279
+        }
+      }
+    },
+    "any_tone_flag": {
+      "calls": 0,
+      "errors": 0,
+      "error_rate": null,
+      "share_of_errors": 0.0,
+      "by_gender": {
+        "M": {
+          "calls": 0,
+          "errors": 0
+        },
+        "F": {
+          "calls": 0,
+          "errors": 0
+        }
+      }
+    },
+    "no_tone_flag": {
+      "calls": 22388,
+      "errors": 570,
+      "error_rate": 0.025460067893514383,
+      "share_of_errors": 1.0,
+      "by_gender": {
+        "M": {
+          "calls": 10480,
+          "errors": 290
+        },
+        "F": {
+          "calls": 11908,
+          "errors": 280
+        }
+      }
+    },
+    "duration_ge20_low_silence": {
+      "calls": 16587,
+      "errors": 404,
+      "error_rate": 0.024356423705311388,
+      "share_of_errors": 0.7087719298245614,
+      "by_gender": {
+        "M": {
+          "calls": 7403,
+          "errors": 213
+        },
+        "F": {
+          "calls": 9184,
+          "errors": 191
+        }
+      }
+    }
+  },
+  "cohorts": {
+    "persistent": {
+      "calls": 476,
+      "errors": 476,
+      "error_rate": 1.0,
+      "share_of_errors": 0.8350877192982457,
+      "by_gender": {
+        "M": {
+          "calls": 246,
+          "errors": 246
+        },
+        "F": {
+          "calls": 230,
+          "errors": 230
+        }
+      },
+      "median_duration": 30.301499999999997,
+      "median_segments": 16.0,
+      "median_silence": 0.04198258843417972,
+      "median_reliable_f0_ratio": 0.8571428571428571
+    },
+    "corrected": {
+      "calls": 174,
+      "errors": 0,
+      "error_rate": 0.0,
+      "share_of_errors": 0.0,
+      "by_gender": {
+        "M": {
+          "calls": 86,
+          "errors": 0
+        },
+        "F": {
+          "calls": 88,
+          "errors": 0
+        }
+      },
+      "median_duration": 24.954499999999996,
+      "median_segments": 13.0,
+      "median_silence": 0.035998330322613355,
+      "median_reliable_f0_ratio": 0.8666666666666667
+    },
+    "regressed": {
+      "calls": 94,
+      "errors": 94,
+      "error_rate": 1.0,
+      "share_of_errors": 0.1649122807017544,
+      "by_gender": {
+        "M": {
+          "calls": 44,
+          "errors": 44
+        },
+        "F": {
+          "calls": 50,
+          "errors": 50
+        }
+      },
+      "median_duration": 27.374500000000005,
+      "median_segments": 15.0,
+      "median_silence": 0.038230549262907164,
+      "median_reliable_f0_ratio": 0.85
+    },
+    "control": {
+      "calls": 21644,
+      "errors": 0,
+      "error_rate": 0.0,
+      "share_of_errors": 0.0,
+      "by_gender": {
+        "M": {
+          "calls": 10104,
+          "errors": 0
+        },
+        "F": {
+          "calls": 11540,
+          "errors": 0
+        }
+      },
+      "median_duration": 30.292000000000005,
+      "median_segments": 15.0,
+      "median_silence": 0.04089002833201964,
+      "median_reliable_f0_ratio": 0.8571428571428571
+    }
+  },
+  "source_folders": {
+    "TS_서울_구급": {
+      "calls": 22388,
+      "errors": 570,
+      "error_rate": 0.025460067893514383,
+      "share_of_errors": 1.0,
+      "by_gender": {
+        "M": {
+          "calls": 10480,
+          "errors": 290
+        },
+        "F": {
+          "calls": 11908,
+          "errors": 280
+        }
+      }
+    }
+  },
+  "f0_medians_hz": {
+    "M_correct": {
+      "median_hz": 147.10360982822127,
+      "valid": 10189,
+      "missing": 1
+    },
+    "M_wrong": {
+      "median_hz": 206.23063347816995,
+      "valid": 290,
+      "missing": 0
+    },
+    "F_correct": {
+      "median_hz": 230.17774761118477,
+      "valid": 11628,
+      "missing": 0
+    },
+    "F_wrong": {
+      "median_hz": 185.86420310065586,
+      "valid": 280,
+      "missing": 0
+    }
+  }
+}

@@ -1,0 +1,8 @@
+numpy==2.2.2
+scipy==1.18.1
+soundfile==0.13.1
+transformers==4.46.3
+tokenizers==0.20.3
+huggingface-hub==0.31.4
+safetensors==0.5.3
+loralib==0.1.2

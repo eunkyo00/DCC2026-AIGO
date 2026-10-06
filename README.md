@@ -121,14 +121,15 @@ threshold 조정을 고려할 만한 수준. 오디오가 이미 8kHz/mono로 �
 
 - **입력 근거**: 라벨의 `startAt`/`endAt`/`speaker`만 학습 시 사용 가능 (대회 규정)
 - **현재 실험**: 신고자(`speaker == 1`) 구간을 사용하고 모델별 특징을 통화 단위로 집계한다.
-  F0 + Acoustic + LR, MFCC(13계수) + RBF SVM, Frozen Wav2Vec2 + LR 평가를 완료했다.
+  F0 + Acoustic + LR, MFCC(13계수) + RBF SVM, Frozen Wav2Vec2 + LR, 고정 Gender ECAPA 평가를 완료했다.
 - **라벨**: 통화 json의 `gender`
 - **결과**: 동일 Internal Validation 5,597통화에서 각각 91.209577%, 95.068787%,
-  97.248526%. 전체 L4 Wav2Vec2 embedding 추출 및 감사는 실제 11.19시간 걸렸다.
+  97.248526%, 96.819725%. 현재 최고는 Frozen Wav2Vec2 + LR이다.
+  전체 L4 Wav2Vec2 embedding 추출 및 감사는 실제 11.19시간 걸렸다.
 - **초기 공통 유틸리티 예제**: 5초 pad/trim, MFCC 40계수와 100건 속도 측정은 초기
   전처리 예제이며 현재 Mission 1 실험 설정·전체 소요시간을 나타내지 않는다.
-- **진행 상태**: 기본 오류 비교까지 완료. 개별 오답 원인 분석과 새 입력용 통합 추론은
-  후속 단계다. [Mission 1 README](mission-1/README.md)에서 설정·결과·폴더를 확인한다.
+- **진행 상태**: Train CV·OOF 정량 오류 분석, ECAPA/WavLM 200통화 비교, ECAPA Validation 검증까지 완료.
+  본체 fine-tuning·표본 청취·새 입력용 통합 추론은 완료 결과에 포함하지 않는다. [Mission 1 README](mission-1/README.md)에서 설정·결과·폴더를 확인한다.
 
 ### Mission 2 — 화자 분류 (신고자 vs 119대원)
 
