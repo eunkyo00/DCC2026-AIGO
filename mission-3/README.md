@@ -115,3 +115,14 @@ Macro F1은 0.63845에서 0.64010으로 소폭 상승했지만, 두통과 전신
 
 - [결과 보고서·증상별 지표](results/targeted_weight_2026-10-07/README.md)
 - [재실행 Colab 노트북](models/roberta/M3_WeightedBCE_TargetedLowRecallWeights_fixed05.ipynb)
+
+## 2-1 실험: 낮은 recall 증상 가중치 반복 검증 (2026-10-07)
+
+동일한 W0/W1 조건을 seed 42·123·2026에서 비교했다. seed 42는 기존 결과를
+재사용했다. W1이 세 seed에서 모두 높았고 평균 Macro F1은 **0.63738 → 0.64001**
+(평균 paired 차이 **+0.00263**)이었다. 오심 평균 recall은 0.3802 → 0.4571로
+높아졌지만 precision은 하락했다. 목표 0.65에는 도달하지 못했으며 공식 Validation
+결과도 아니다.
+
+- [반복 검증 보고서·seed별 지표](results/targeted_weight_multiseed_2026-10-07/README.md)
+- [2-1 Colab 노트북](models/roberta/M3_2-1_TargetedWeight_RuntimeOnly_fixed05.ipynb)

@@ -1,0 +1,8 @@
+{
+  "fixed_threshold": 0.5,
+  "fixed_threshold_macro_f1": 0.635013958361593,
+  "seed": 2026,
+  "experiment": "w0_current_weight",
+  "evaluation": "internal validation",
+  "selection": "final_epoch"
+}
