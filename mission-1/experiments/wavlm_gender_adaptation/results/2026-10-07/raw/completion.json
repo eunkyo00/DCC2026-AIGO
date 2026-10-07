@@ -1,0 +1,32 @@
+{
+  "status": "complete",
+  "identity": "49725c8a0b4daed276a2ba30dcde37ffab5e220fdf717b1e2be5e0e700ff9d15",
+  "models": {
+    "frozen_lr": {
+      "metrics": {
+        "calls": 5597,
+        "correct": 5490,
+        "wrong": 107,
+        "accuracy": 0.9808826156869752,
+        "confusion_matrix_M_F": [
+          [
+            2561,
+            59
+          ],
+          [
+            48,
+            2929
+          ]
+        ],
+        "gender_accuracy": {
+          "M": 0.9774809160305343,
+          "F": 0.9838763856231105
+        }
+      },
+      "prediction_identity": "5425013844a2b3724add482290ac3325ad846688f227eda7547ae5f6d35b5d5d",
+      "path": "validation_frozen_lr.jsonl",
+      "sha256": "b77f61ccd46947f95cc051797ece0125ebdc0ee5d1d742f0cc060d9166eefab8"
+    }
+  },
+  "scope": "Previously observed Internal Validation, not independent test"
+}

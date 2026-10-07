@@ -1,0 +1,51 @@
+{
+  "identity": "49725c8a0b4daed276a2ba30dcde37ffab5e220fdf717b1e2be5e0e700ff9d15",
+  "initial_files": {
+    "config.json": "a3d8fe831aaf63d725b54a8ac36f3549cd4365c5086774b2c89cabbc6f9e129d",
+    "preprocessor_config.json": "60ca5a31e13f69ee2fbf147504c8676db5f6398fd7a6b12294341dff838edfcf",
+    "pytorch_model.bin": "fdee460e529396ddb2f8c8e8ce0ad74cfb747b726bc6f612e666c7c1e1963c9d"
+  },
+  "numeric_reference": "fp32",
+  "numeric_candidate": "bf16",
+  "numeric_checks": [
+    {
+      "call_id": "d9bab5600217a67afb083dbd9b82c9c0eb087c2fa7388574421275633010fd3e",
+      "relative_l2": 0.007064100354909897,
+      "max_abs": 0.527862548828125
+    },
+    {
+      "call_id": "873cb56955f338580453f11be3498d78b2c455cf00d565c4679cf3266ca443c3",
+      "relative_l2": 0.00535570876672864,
+      "max_abs": 0.2907562255859375
+    },
+    {
+      "call_id": "cec7593d75bf36b098f7749edf62b468d5118f48456b425411cbca7e7eab9b2b",
+      "relative_l2": 0.005532488226890564,
+      "max_abs": 0.30001068115234375
+    },
+    {
+      "call_id": "67c47b50382fc0ed3b38e9f7472a0eb3e1c90c7093db80cd92c883796bdba180",
+      "relative_l2": 0.0033997863065451384,
+      "max_abs": 0.17674338817596436
+    },
+    {
+      "call_id": "a2b5df2f5762d0e1f6029c09ad96494158f18246a1b596c85b5b0e96f575d772",
+      "relative_l2": 0.005597698502242565,
+      "max_abs": 0.2757720947265625
+    },
+    {
+      "call_id": "96d9cd34e38a42d7c26536ee4901c89ca004eadcc0a21be2d4118f833028b2da",
+      "relative_l2": 0.004141790792346001,
+      "max_abs": 0.16986083984375
+    }
+  ],
+  "model_load_seconds": 8.166681764000032,
+  "memory": {
+    "rss_GiB": 2.980316162109375,
+    "available_RAM_GiB": 48.99964141845703,
+    "peak_VRAM_GiB": 1.4647440910339355,
+    "reserved_VRAM_GiB": 1.478515625,
+    "drive_free_GiB": 181.91107177734375
+  },
+  "status": "pass"
+}

@@ -1,0 +1,132 @@
+{
+  "identity": "49725c8a0b4daed276a2ba30dcde37ffab5e220fdf717b1e2be5e0e700ff9d15",
+  "candidates": [
+    {
+      "kind": "last_mean",
+      "C": 0.1,
+      "metrics": {
+        "calls": 4478,
+        "correct": 4388,
+        "wrong": 90,
+        "accuracy": 0.9799017418490398,
+        "confusion_matrix_M_F": [
+          [
+            2048,
+            48
+          ],
+          [
+            42,
+            2340
+          ]
+        ],
+        "gender_accuracy": {
+          "M": 0.9770992366412213,
+          "F": 0.982367758186398
+        }
+      },
+      "fit_seconds": 2.52072683100414
+    },
+    {
+      "kind": "last_mean",
+      "C": 1.0,
+      "metrics": {
+        "calls": 4478,
+        "correct": 4357,
+        "wrong": 121,
+        "accuracy": 0.9729790084859312,
+        "confusion_matrix_M_F": [
+          [
+            2035,
+            61
+          ],
+          [
+            60,
+            2322
+          ]
+        ],
+        "gender_accuracy": {
+          "M": 0.9708969465648855,
+          "F": 0.9748110831234257
+        }
+      },
+      "fit_seconds": 4.675196143994981
+    },
+    {
+      "kind": "multi_mean_std",
+      "C": 0.1,
+      "metrics": {
+        "calls": 4478,
+        "correct": 4385,
+        "wrong": 93,
+        "accuracy": 0.9792317999106744,
+        "confusion_matrix_M_F": [
+          [
+            2049,
+            47
+          ],
+          [
+            46,
+            2336
+          ]
+        ],
+        "gender_accuracy": {
+          "M": 0.9775763358778626,
+          "F": 0.980688497061293
+        }
+      },
+      "fit_seconds": 9.513084881997202
+    },
+    {
+      "kind": "multi_mean_std",
+      "C": 1.0,
+      "metrics": {
+        "calls": 4478,
+        "correct": 4376,
+        "wrong": 102,
+        "accuracy": 0.9772219740955784,
+        "confusion_matrix_M_F": [
+          [
+            2040,
+            56
+          ],
+          [
+            46,
+            2336
+          ]
+        ],
+        "gender_accuracy": {
+          "M": 0.9732824427480916,
+          "F": 0.980688497061293
+        }
+      },
+      "fit_seconds": 6.252448252002068
+    }
+  ],
+  "selected": {
+    "kind": "last_mean",
+    "C": 0.1,
+    "metrics": {
+      "calls": 4478,
+      "correct": 4388,
+      "wrong": 90,
+      "accuracy": 0.9799017418490398,
+      "confusion_matrix_M_F": [
+        [
+          2048,
+          48
+        ],
+        [
+          42,
+          2340
+        ]
+      ],
+      "gender_accuracy": {
+        "M": 0.9770992366412213,
+        "F": 0.982367758186398
+      }
+    },
+    "fit_seconds": 2.52072683100414
+  },
+  "adaptation_eligible": true,
+  "rule": "accuracy, then last_mean, then smaller C"
+}

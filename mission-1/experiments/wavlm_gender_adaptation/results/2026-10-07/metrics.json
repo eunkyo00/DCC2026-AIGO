@@ -1,0 +1,53 @@
+{
+  "status": "locally_verified",
+  "models": {
+    "frozen_lr": {
+      "metrics": {
+        "calls": 5597,
+        "correct": 5490,
+        "wrong": 107,
+        "accuracy": 0.9808826156869752,
+        "confusion_matrix_M_F": [
+          [
+            2561,
+            59
+          ],
+          [
+            48,
+            2929
+          ]
+        ],
+        "gender_accuracy": {
+          "M": 0.9774809160305343,
+          "F": 0.9838763856231105
+        }
+      },
+      "versus_baselines": {
+        "mfcc": {
+          "corrected": 207,
+          "regressed": 38,
+          "both_wrong": 69,
+          "both_correct": 5283
+        },
+        "wav2vec2": {
+          "corrected": 82,
+          "regressed": 35,
+          "both_wrong": 72,
+          "both_correct": 5408
+        },
+        "ecapa": {
+          "corrected": 121,
+          "regressed": 50,
+          "both_wrong": 57,
+          "both_correct": 5369
+        }
+      },
+      "reached_99": false
+    }
+  },
+  "baseline_sha256": "e4c9f2addbdbc339f34f459cc562121a8df429e761a33b7b70a18a9a6dc99081",
+  "identity": "49725c8a0b4daed276a2ba30dcde37ffab5e220fdf717b1e2be5e0e700ff9d15",
+  "historical_failures": 0,
+  "unresolved_failures": 0,
+  "scope": "Previously observed Internal Validation; not independent test; official Validation unused"
+}

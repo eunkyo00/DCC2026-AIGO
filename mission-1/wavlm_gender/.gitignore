@@ -1,0 +1,10 @@
+data/
+__pycache__/
+.venv/
+*.pt
+*.pth
+*.joblib
+*.npz
+*.wav
+*.zip
+config.local.py

@@ -1,0 +1,11 @@
+artifacts/
+outputs/
+cache/
+*.pt
+*.bin
+*.safetensors
+*.npz
+*.npy
+*.wav
+__pycache__/
+data/jobs.json
