@@ -1,0 +1,33 @@
+{
+  "identity": "49725c8a0b4daed276a2ba30dcde37ffab5e220fdf717b1e2be5e0e700ff9d15",
+  "frozen": {
+    "kind": "last_mean",
+    "C": 0.1,
+    "metrics": {
+      "calls": 4478,
+      "correct": 4388,
+      "wrong": 90,
+      "accuracy": 0.9799017418490398,
+      "confusion_matrix_M_F": [
+        [
+          2048,
+          48
+        ],
+        [
+          42,
+          2340
+        ]
+      ],
+      "gender_accuracy": {
+        "M": 0.9770992366412213,
+        "F": 0.982367758186398
+      }
+    },
+    "fit_seconds": 2.52072683100414
+  },
+  "adaptation": null,
+  "refit": "Reset pinned backbone and seed42 head; fit ALL 22388 Train. LR fit once; neural chosen epoch count, no dev early stopping; 4-epoch scheduler horizon.",
+  "decision": "F/M probability argmax; no Validation tuning",
+  "locked_at": 1791332233.0100906,
+  "adaptation_skipped": "Explicit bounded frozen-only run; no claim about fine-tuning benefit."
+}

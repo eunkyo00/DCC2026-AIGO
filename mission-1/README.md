@@ -1,9 +1,10 @@
 # Mission 1 · 신고자 음성 성별 분류
 
 신고자(caller)의 음성과 발화 구간으로 통화별 Male / Female을 예측한다.
-**현재 최고 Internal Validation Accuracy는 Frozen Wav2Vec2 + LR의 97.248526%다.**
-고정 ECAPA 평가까지 완료했으며 99% 목표는 아직 달성하지 못했다. 기록 기준: 2026-09-22.
+**현재 최고 Internal Validation Accuracy는 Frozen WavLM-Large + LR의 98.088262%다.**
+고정 ECAPA 평가까지 완료했으며 99% 목표는 아직 달성하지 못했다. 기록 기준: 2026-10-07.
 
+[WavLM 최신 결과·코드](experiments/wavlm_gender_adaptation/results/2026-10-07/README.md) ·
 [전체 실험 이력](EXPERIMENT_LOG.md) · [후속 실험 계획](EXPERIMENT_PLAN_99.md) ·
 [Wav2Vec2 결과](ssl/wav2vec2_frozen/results/REPORT.md) ·
 [ECAPA 결과](experiments/gender_model_comparison/validation_results/REPORT.md)
@@ -18,11 +19,13 @@
 | Majority · Female 고정 | 2,977 | 2,620 | 53.189209% | 0.000000% | 100.000000% |
 | F0 + Acoustic → LR | 5,105 | 492 | 91.209577% | 89.961832% | 92.307692% |
 | MFCC → RBF SVM | 5,321 | 276 | 95.068787% | 94.809160% | 95.297279% |
-| **Frozen Wav2Vec2 → LR** | **5,443** | **154** | **97.248526%** | 96.755725% | **97.682230%** |
+| Frozen Wav2Vec2 → LR | 5,443 | 154 | 97.248526% | 96.755725% | 97.682230% |
 | Frozen Gender ECAPA | 5,419 | 178 | 96.819725% | **97.824427%** | 95.935506% |
 
+| **Frozen WavLM-Large → LR** | **5,490** | **107** | **98.088262%** | 97.748092% | **98.387639%** |
+
 ECAPA는 Wav2Vec2의 오답 83개를 교정했지만 정답 107개가 회귀해, 정답이 24개 적었다.
-Male은 개선되고 Female은 하락했다. 현재 최고 모델은 Wav2Vec2로 유지한다.
+Male은 개선되고 Female은 하락했다. WavLM은 Wav2Vec2 오답 82건을 교정하고 정답 35건이 회귀해, 정답이 47건 늘었다.
 99%에는 최소 **5,542 정답 / 최대 55 오답**이 필요하다.
 
 | 실측 작업 | 시간 | 측정 범위 |
@@ -43,6 +46,7 @@ Male은 개선되고 Female은 하락했다. 현재 최고 모델은 Wav2Vec2로
 | Train OOF 오류 분석 | 정량 분석 완료 | 길이·segment 수·무음·F0 연관 분석, 청취용 48통화 표본 준비 |
 | ECAPA / WavLM Train 200통화 비교 | 예비 비교 완료 | ECAPA 99%, WavLM 95%; 사용자 전달 출력 기준, 원본 ZIP 독립 검증은 미완료 |
 | 고정 ECAPA Validation | 평가·로컬 검증 완료 | 96.819725%, 5,597개 exact coverage, 기록된 실패 0건 |
+| Frozen WavLM-Large + LR | 평가·로컬 검증 완료 | 98.088262%, 107오답; backbone 적응 생략 |
 | 최신 모델 조사·추가 학습 설계 | 제안·인계 단계 | MERaLiON-GR, WavLM 학습, Wav2Vec2 부분 fine-tuning 후보 정리 |
 
 **Train CV·Train 200통화·Internal Validation은 서로 다른 평가다.**

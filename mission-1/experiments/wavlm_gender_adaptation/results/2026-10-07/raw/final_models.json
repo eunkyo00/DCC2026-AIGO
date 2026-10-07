@@ -1,0 +1,11 @@
+{
+  "identity": "49725c8a0b4daed276a2ba30dcde37ffab5e220fdf717b1e2be5e0e700ff9d15",
+  "selection_sha256": "4faed587dad496b1f9bc35dfc09f61c5fcb4a84191cea035cd32a70bf29daa13",
+  "models": {
+    "frozen_lr": {
+      "path": "final_lr.joblib",
+      "sha256": "87a32d0b8cdf5c8e958023535aa86a7d75caeeec5782582f9958f52632592282",
+      "kind": "last_mean"
+    }
+  }
+}

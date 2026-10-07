@@ -1,0 +1,57 @@
+{
+  "bundle_sha256": "60f18368fdb1303a413b46d359c4e9c1cf5e4bff7ed236e85d071b05031767d0",
+  "source_identity_sha256": "8c495d620c095b31e1a378c95f17c1fef2fe09c83665d920e511d25b6a1d673d",
+  "model": "microsoft/wavlm-large",
+  "revision": "c1423ed94bb01d80a3f5ce5bc39f6026a0f4828c",
+  "config": {
+    "data_root": "/content/drive/MyDrive/2026 DCC 대학부 데이터/대학부 데이터",
+    "source_output": "/content/drive/MyDrive/DDC-Colab/gender_comparison_v1",
+    "output_dir": "/content/drive/MyDrive/DDC-Colab/wavlm_gender_adaptation_l4_bf16_v2",
+    "precision": "bf16",
+    "expected_gpu": "NVIDIA L4",
+    "crop_seconds": 12,
+    "accumulation": 4
+  },
+  "python": "3.13.15",
+  "packages": {
+    "torch": "2.11.0+cu130",
+    "torchaudio": "2.11.0+cu130",
+    "numpy": "2.2.2",
+    "scipy": "1.15.3",
+    "transformers": "4.46.3",
+    "tokenizers": "0.20.3",
+    "huggingface-hub": "0.31.4",
+    "scikit-learn": "1.6.1",
+    "soundfile": "0.13.1"
+  },
+  "gpu": "NVIDIA L4",
+  "gpu_profile": {
+    "family": "l4",
+    "precision": "bf16",
+    "output_tag": "l4_bf16_v2"
+  },
+  "cuda": "13.0",
+  "source_hashes": {
+    "validation/split_assignments.csv": "04b5018778321f775a0bf95949a37636090d4df4e3710b16627dfee309408f06",
+    "validation/manifests/calls.csv": "dc57d0f7bea6e06017ac3e27444a0ff5bb299e401ea787400e84cbdf7d072e23",
+    "eda/eda_outputs/segments.csv": "8bf8c83c0190232e4500b4067bc28d2611b09dd227a7ce4dc9c3741e6dcce584"
+  },
+  "inner_split_sha256": "b6664bee9b72dd14a53743388274577d6c5b73e5ef5f51ab4d53da6fa3321e17",
+  "precision": "bf16",
+  "window_seconds": 12,
+  "layers": [
+    6,
+    12,
+    18,
+    24
+  ],
+  "normalization": "checkpoint processor on each real window, then pad to 400",
+  "pooling": "real-sample-weighted first/second moments across all balanced caller windows",
+  "class_order": [
+    "F",
+    "M"
+  ],
+  "tf32": false,
+  "backbone_dropout": false,
+  "spec_augment": false
+}
