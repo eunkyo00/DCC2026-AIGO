@@ -1,0 +1,8 @@
+{
+  "fixed_threshold": 0.5,
+  "fixed_threshold_macro_f1": 0.6390016241469622,
+  "seed": 123,
+  "experiment": "w1_targeted_low_recall_x125",
+  "evaluation": "internal validation",
+  "selection": "final_epoch"
+}
