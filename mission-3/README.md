@@ -126,3 +126,12 @@ Macro F1은 0.63845에서 0.64010으로 소폭 상승했지만, 두통과 전신
 
 - [반복 검증 보고서·seed별 지표](results/targeted_weight_multiseed_2026-10-07/README.md)
 - [2-1 Colab 노트북](models/roberta/M3_2-1_TargetedWeight_RuntimeOnly_fixed05.ipynb)
+
+## 2-2 실험 계획: 오심 단독 가중치 (미실행)
+
+2-1에서 오심 F1은 세 seed 모두 올랐지만 두통 F1은 모두 하락했다. 다음 조건은
+두통·전신쇠약 가중치를 W0로 되돌리고 오심 가중치만 1.25배로 높인다. 기존 W0
+예측을 재사용하고 seed 42·123·2026을 각각 한 번씩 새로 학습한다. 분할·입력·head·
+학습 설정·임계값 0.5는 그대로 둔다. **아직 결과가 없으며 성능 향상을 주장하지 않는다.**
+
+- [2-2 단일 seed 실행 Colab 노트북](models/roberta/M3_2-2_NauseaOnly_OneSeed_fixed05.ipynb)
