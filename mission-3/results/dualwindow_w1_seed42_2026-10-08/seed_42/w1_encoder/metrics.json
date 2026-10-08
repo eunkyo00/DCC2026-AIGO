@@ -1,0 +1,8 @@
+{
+  "fixed_threshold": 0.5,
+  "fixed_threshold_macro_f1": 0.6373197067622774,
+  "seed": 42,
+  "experiment": "w1_encoder",
+  "evaluation": "internal validation",
+  "selection": "final_epoch"
+}
