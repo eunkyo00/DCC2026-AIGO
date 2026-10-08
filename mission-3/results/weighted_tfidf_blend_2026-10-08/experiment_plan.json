@@ -1,0 +1,30 @@
+{
+  "threshold": 0.5,
+  "B_weight": 0.8,
+  "tfidf_weight": 0.2,
+  "C": 2.0,
+  "seed": 42,
+  "max_iter": 1000,
+  "solver": "liblinear",
+  "analyzer": "char",
+  "ngram_range": [
+    2,
+    5
+  ],
+  "min_df": 2,
+  "max_features": 150000,
+  "sublinear_tf": true,
+  "positive_weight_rule": "clip(sqrt(negative/positive),1,3)",
+  "input_sha256": {
+    "mission3_train_json.zip": "d616fdfb5c977aed28a0b3bb94b9dc2ff250906b8f936e385dc50afd7d52e6ee",
+    "m3_targeted_weight_results.tar.gz": "6c7501376e62eb2857cb9bc8d77627d4ba7b124e579af636ffd77cd19868408a",
+    "m3_2_4_fixed_ensemble_results.tar": "855de3c2e5e78d756d16dc4add44893b6472005e50f23cd3155b52dad82f4f98"
+  },
+  "environment": {
+    "python": "3.13.15",
+    "numpy": "2.1.3",
+    "pandas": "2.2.3",
+    "scikit-learn": "1.6.1",
+    "joblib": "1.6.0"
+  }
+}
