@@ -138,3 +138,14 @@ Macro F1은 0.63845에서 0.64010으로 소폭 상승했지만, 두통과 전신
 
 - [seed 42 결과 보고서·증상별 지표](results/nausea_only_seed42_2026-10-07/README.md)
 - [2-2 단일 seed 실행 Colab 노트북](models/roberta/M3_2-2_NauseaOnly_OneSeed_fixed05.ipynb)
+
+## 2-3 실험: KLUE-RoBERTa Large + W1 가중치 (2026-10-08)
+
+seed 42의 내부 검증에서 고정 임계값 0.5 Macro F1은 **0.637518**이었다. 이전
+2-1 W1 Base의 0.640102보다 0.002584 낮고 목표 0.66에도 미치지 못했다.
+2 epoch에서는 0.641799였으나 사전에 정한 최종 평가 대상은 4 epoch 모델이다.
+Large는 micro batch 2 × 누적 4, 이전 Base는 batch 8 × 누적 1로 학습했으므로
+인코더 크기의 효과만 분리한 비교는 아니다. 공식 Validation 점수도 아니다.
+
+- [2-3 결과 보고서·증상별 지표](results/roberta_large_w1_seed42_2026-10-08/README.md)
+- [2-3 실행 Colab 노트북](models/roberta/M3_2-3_RoBERTaLarge_W1_fixed05.ipynb)
