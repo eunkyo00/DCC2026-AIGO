@@ -1,0 +1,7 @@
+{
+  "manifest_sha256": "69817218fd5677067294a6d65ec44a3d0b4d7d5d4690f71f6fa4eaea1cfcf64e",
+  "B_prediction_sha256": "d97747a144f6aca67769448a68e4c58aa05952f92841e40b90a5de0d52be75f6",
+  "B_macro_f1": 0.6474228567088907,
+  "train_count": 23408,
+  "valid_count": 5792
+}

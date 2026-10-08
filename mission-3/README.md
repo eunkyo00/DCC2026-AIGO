@@ -170,3 +170,12 @@ A와 W1 Large seed 42를 50:50으로 결합한 B는 **0.647423**이었다. 임�
 
 - [2-5 결과 보고서·증상별 지표](results/weighted_tfidf_blend_2026-10-08/README.md)
 - [2-5 실행 Colab 노트북](models/roberta/M3_2-5_WeightedTFIDF_Blend_fixed05.ipynb)
+
+## 2-6 실험: 문자+단어 TF-IDF 결합 (2026-10-08)
+
+기존 2-5의 가중 문자 TF-IDF에 단어 1~2그램을 더해 같은 80:20 비율,
+임계값 0.5로 결합했다. 내부 검증 Macro F1은 **0.650060**으로 2-5의
+**0.650944**보다 0.000884 낮았다. 현 기준점은 2-5로 유지한다.
+
+- [2-6 간단 결과 보고서](results/charword_tfidf_blend_2026-10-08/README.md)
+- [2-6 실행 Colab 노트북](models/roberta/M3_2-6_CharWordTFIDF_Blend_fixed05.ipynb)
