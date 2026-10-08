@@ -1,0 +1,22 @@
+{
+  "threshold": 0.5,
+  "primary": "A_base3_equal",
+  "secondary": "B_base3_large_equal",
+  "blends": {
+    "A_base3_equal": {
+      "base42": 0.3333333333333333,
+      "base123": 0.3333333333333333,
+      "base2026": 0.3333333333333333
+    },
+    "B_base3_large_equal": {
+      "base42": 0.16666666666666666,
+      "base123": 0.16666666666666666,
+      "base2026": 0.16666666666666666,
+      "large42": 0.5
+    }
+  },
+  "selection": "all constituent models use final epoch",
+  "target_macro_f1": 0.66,
+  "evaluation": "internal validation",
+  "created_utc": "2026-10-08T05:09:51.892072+00:00"
+}
