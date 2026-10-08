@@ -149,3 +149,14 @@ Large는 micro batch 2 × 누적 4, 이전 Base는 batch 8 × 누적 1로 학습
 
 - [2-3 결과 보고서·증상별 지표](results/roberta_large_w1_seed42_2026-10-08/README.md)
 - [2-3 실행 Colab 노트북](models/roberta/M3_2-3_RoBERTaLarge_W1_fixed05.ipynb)
+
+## 2-4 실험: Base 다중 seed와 Large 고정 비율 앙상블 (2026-10-08)
+
+W1 Base seed 42·123·2026을 동일 비율로 결합한 A는 Macro F1 **0.645129**,
+A와 W1 Large seed 42를 50:50으로 결합한 B는 **0.647423**이었다. 임계값은
+0.5로 고정했으며 결합 비율도 실행 전에 정했다. B는 Base seed 42보다 약
+0.73%p 높지만 목표 0.66에는 미치지 못했다. 기존 내부 검증 예측을 결합한 탐색
+결과이며 공식 Validation 결과가 아니다. TF-IDF는 포함하지 않았다.
+
+- [2-4 결과 보고서·증상별 지표](results/fixed_ensemble_2026-10-08/README.md)
+- [2-4 실행 Colab 노트북](models/roberta/M3_2-4_FixedSeedEnsemble_fixed05.ipynb)
