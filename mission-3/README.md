@@ -179,3 +179,12 @@ A와 W1 Large seed 42를 50:50으로 결합한 B는 **0.647423**이었다. 임�
 
 - [2-6 간단 결과 보고서](results/charword_tfidf_blend_2026-10-08/README.md)
 - [2-6 실행 Colab 노트북](models/roberta/M3_2-6_CharWordTFIDF_Blend_fixed05.ipynb)
+
+## 2-7 실험: 앞·뒤 발화 두 창 처리 (2026-10-08)
+
+KLUE-RoBERTa Base가 통화 앞·뒤의 최대 512토큰 창을 각각 읽고 logit을 평균했다.
+seed 42, 고정 임계값 0.5의 내부 검증 Macro F1은 **0.637320**으로 기존 W1 Base
+First-512의 **0.640102**보다 낮았다. 현재 최고 기록은 2-5 앙상블 **0.650944**다.
+
+- [2-7 결과 보고서](results/dualwindow_w1_seed42_2026-10-08/README.md)
+- [2-7 실행 Colab 노트북](models/roberta/M3_2-7_DualWindow_W1_Base_fixed05.ipynb)
