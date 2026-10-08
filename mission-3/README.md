@@ -160,3 +160,13 @@ A와 W1 Large seed 42를 50:50으로 결합한 B는 **0.647423**이었다. 임�
 
 - [2-4 결과 보고서·증상별 지표](results/fixed_ensemble_2026-10-08/README.md)
 - [2-4 실행 Colab 노트북](models/roberta/M3_2-4_FixedSeedEnsemble_fixed05.ipynb)
+
+## 2-5 실험: 가중 TF-IDF와 기존 앙상블 결합 (2026-10-08)
+
+2-4 B 앙상블 80%와 가중 TF-IDF 20%의 고정 결합은 내부 검증 Macro F1
+**0.650944**였다. 기존 B의 0.647423보다 약 0.35%p 높고 일반 TF-IDF 결합
+0.648975보다도 높았다. 임계값은 0.5로 고정했다. 목표 0.66에는 미달했으며
+오심 F1은 0.3815 → 0.3763으로 하락했다. 공식 Validation 결과가 아니다.
+
+- [2-5 결과 보고서·증상별 지표](results/weighted_tfidf_blend_2026-10-08/README.md)
+- [2-5 실행 Colab 노트북](models/roberta/M3_2-5_WeightedTFIDF_Blend_fixed05.ipynb)
