@@ -1,0 +1,11 @@
+# Python 3.11 이상. 원 실험의 WavLM BF16 연산을 위해 CUDA/BF16 GPU 필요.
+torch==2.11.0
+transformers==4.46.3
+tokenizers==0.20.3
+huggingface-hub==0.31.4
+numpy==2.2.2
+scipy==1.15.3
+soundfile==0.13.1
+scikit-learn==1.6.1
+joblib==1.4.2
+threadpoolctl==3.6.0
