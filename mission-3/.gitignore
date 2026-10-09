@@ -12,3 +12,4 @@ artifacts/*
 *.npy
 *.tar.gz
 *.zip
+.codex-build/

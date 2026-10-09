@@ -1,14 +1,18 @@
 # Mission 3 — 통화 텍스트의 9개 증상 다중 라벨 분류
 
-## 팀원 확인용 보고서·PPT 초안 (2026-10-09)
+## 팀 공유 보고서·PPT 원고 (2026-10-10)
 
 - [MISSION3_PPT_DRAFT_2026-10-09.md — PPT 8페이지 원고·발표자 설명](MISSION3_PPT_DRAFT_2026-10-09.md)
-- [MISSION3_REPORT_DRAFT_2026-10-09.md — 수행 보고서·사회안전 시사점·제출 체크리스트](MISSION3_REPORT_DRAFT_2026-10-09.md)
+- [MISSION3_REPORT_DRAFT_2026-10-09.md — 수행 보고서·공식 Validation 결과·제출 점검](MISSION3_REPORT_DRAFT_2026-10-09.md)
 
-**공식 Validation 평가 진행 중 / 최종 성능 미확정.** 현재 최고 0.650944는
-Training에서 분리한 내부 검증 Macro F1이다. 최고 2-5 설정으로 재학습·모델 백업·
-공식 Validation 평가를 진행하고 있으며, 완료 후 두 초안의 성능표와 결론을 갱신한다.
-아래 원고는 Markdown 문서이며 완성 `.pptx`나 최종 제출 패키지가 아니다.
+**공식 Validation 평가 완료:** 이번 재학습의 내부 검증 Macro F1은 0.649686,
+공식 Validation 3,640건은 0.647617이다. 과거 내부 개발 최고 0.650944와 구분한다.
+공식 Validation 결과로 설정을 사후 튜닝하지 않았다. 새 가상환경에서 오프라인
+복원 추론과 CSV 구조 검수를 완료했다. 실제 Validation 7건의 예측이 일치했고
+빈 전사·긴 전사 2건도 처리했다. 비공개 Test 평가는 포함하지 않는다.
+
+- [최종 발표자료](output/MISSION3_FINAL_2026-10-10.pptx)
+- [최종 검수 기록](FINAL_CHECK_2026-10-10.md)
 
 통화의 `utterances[].text`를 원래 순서대로 공백으로 연결해 0~9개 증상을 예측한다.
 클래스 순서는 **고열, 구토, 두통, 복통, 어지러움, 열상, 오심, 전신쇠약, 호흡곤란**이다.
