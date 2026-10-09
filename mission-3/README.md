@@ -188,3 +188,13 @@ First-512의 **0.640102**보다 낮았다. 현재 최고 기록은 2-5 앙상블
 
 - [2-7 결과 보고서](results/dualwindow_w1_seed42_2026-10-08/README.md)
 - [2-7 실행 Colab 노트북](models/roberta/M3_2-7_DualWindow_W1_Base_fixed05.ipynb)
+
+## 2-8 실험: 기존 최고와 문맥 모델 고정 결합
+
+2-5 확률 80%와 2-7 문맥 모델 확률 20%를 고정 결합했다. 임계값 0.5의 내부
+검증 Macro F1은 **0.650801**로 기존 최고 **0.650944**보다 0.000144 낮았다.
+두통·호흡곤란은 개선됐지만 오심·구토 등이 하락해 기준 모델은 2-5로 유지한다.
+새 학습 없이 예측을 결합한 탐색 결과이며 공식 Validation 결과가 아니다.
+
+- [2-8 결과 보고서·증상별 지표](results/context_blend_2026-10-09/README.md)
+- [2-8 실행 Colab 노트북](models/roberta/M3_2-8_ContextBlend_fixed05.ipynb)

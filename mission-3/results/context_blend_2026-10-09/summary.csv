@@ -1,0 +1,4 @@
+﻿experiment,macro_f1,delta_vs_2_5,threshold,target_reached
+best_2_5,0.650944375897425,0.0,0.5,False
+context_2_7,0.6373197067622774,-0.013624669135147593,0.5,False
+best80_context20,0.6508006170698375,-0.00014375882758754788,0.5,False

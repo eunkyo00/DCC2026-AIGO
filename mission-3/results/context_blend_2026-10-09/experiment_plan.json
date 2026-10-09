@@ -1,0 +1,9 @@
+{
+  "best_weight": 0.8,
+  "context_weight": 0.2,
+  "threshold": 0.5,
+  "target_macro_f1": 0.66,
+  "new_conditions": 1,
+  "evaluation": "internal validation",
+  "created_utc": "2026-10-08T07:35:56.863070+00:00"
+}
