@@ -1,5 +1,17 @@
 # Mission 1 · 신고자 음성 성별 분류
 
+## 최종 제출 파일 (PPT 제외)
+
+- **[전체 5종 ZIP 다운로드](https://github.com/eunkyo00/DCC2026-AIGO/releases/download/mission1-submission-20261009/Mission1_final_submission.zip)** — 약 1.03GB, `model.pt` 포함
+- [제출 소스 폴더](final_submission/): `inference.py`, `model.py`, `train.ipynb`, `requirements.txt`
+- `train.ipynb`에는 실제 학습 로그를 보존했다. 모델 파일은 용량 때문에 Release ZIP으로 제공한다.
+- CUDA/BF16 지원 GPU 필요. 코드·로그·체크포인트 및 압축 무결성 확인 완료; 전체 음성 입력 → CSV의 CUDA 실행은 미검증.
+
+```bash
+python inference.py --audio_dir WAV_FOLDER --label_dir JSON_FOLDER --ckpt_path model.pt --output ./outputs/mission1.csv
+```
+
+
 신고자(caller)의 음성과 발화 구간으로 통화별 Male / Female을 예측한다.
 **현재 최고 Internal Validation Accuracy는 WavLM + Wav2Vec2 앙상블의 98.213329%다.**
 WavLM + Wav2Vec2 앙상블 평가까지 완료했으며 99% 목표는 아직 달성하지 못했다. 기록 기준: 2026-10-09.
@@ -89,5 +101,5 @@ Train 200통화의 99%나 MFCC 결합 CV 결과를 위 Validation 성능표에 �
 
 과거 인계 문서와 초기 smoke/benchmark 결과는 당시 단계의 기록으로 보존한다.
 Wav2Vec2 `results/` 바로 아래의 초기 Mac 측정과 `results/full_l4/` 최종 결과를 구분한다.
-원본 WAV·가중치·embedding cache·업로드 ZIP은 GitHub에 포함하지 않는다.
+원본 WAV·embedding cache는 GitHub에 포함하지 않는다. 최종 제출 가중치와 ZIP은 위 GitHub Release에서 제공한다.
 별도 경량 모델 및 다른 창의 작업은 이 문서의 검증 완료 결과에 포함하지 않았다.
