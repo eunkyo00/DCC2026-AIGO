@@ -198,3 +198,13 @@ First-512의 **0.640102**보다 낮았다. 현재 최고 기록은 2-5 앙상블
 
 - [2-8 결과 보고서·증상별 지표](results/context_blend_2026-10-09/README.md)
 - [2-8 실행 Colab 노트북](models/roberta/M3_2-8_ContextBlend_fixed05.ipynb)
+
+## 2-9 실험: W1 Base + R-Drop (2026-10-09)
+
+seed 42, 임계값 0.5의 단일 모델 Macro F1은 **0.640420**이었다. 과거 W1
+**0.640102**보다 0.000319 높지만 실행 배치 방식이 달라 R-Drop만의 효과로
+단정할 수 없다. 두통·전신쇠약은 개선됐고 오심은 하락했다. TF-IDF 결합은 아직
+평가하지 않았으며 최고 앙상블은 2-5 **0.650944**로 유지한다.
+
+- [2-9 결과 보고서·설정·학습 로그](results/rdrop_w1_seed42_2026-10-09/README.md)
+- [2-9 실행 Colab 노트북](models/roberta/M3_2-9_RDrop_W1_Base_fixed05.ipynb)
