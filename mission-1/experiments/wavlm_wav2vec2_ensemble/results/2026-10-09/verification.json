@@ -1,0 +1,42 @@
+{
+  "status": "verified_returned_predictions",
+  "calls": 5597,
+  "metrics": {
+    "n": 5597,
+    "correct": 5497,
+    "wrong": 100,
+    "accuracy": 0.9821332856887618,
+    "gender_accuracy": {
+      "F": 0.9848841115216661,
+      "M": 0.9790076335877863
+    },
+    "confusion_F_M": [
+      [
+        2932,
+        45
+      ],
+      [
+        55,
+        2565
+      ]
+    ]
+  },
+  "versus_wavlm": {
+    "corrected": 11,
+    "regressed": 4,
+    "both_correct": 5486,
+    "both_wrong": 96
+  },
+  "source_hashes": {
+    "completion.json": "fdeb2c6e6611a545b2217e62f028243e9cdb740295d70587759205b9cf596028",
+    "identity.json": "1f9d47d1312e1ae9141e794a760221c1b8eaac0240ea4097e816dfaf29caa5d7",
+    "models.json": "f51a5602a7af81f5020edc943225403a671dfe0dd07871a4088044654c1e3040",
+    "selection.lock.json": "481f342c498662c6d472ff5e01750a20425739bfb34ec1aa043f1bcf43218f27",
+    "validation_predictions.csv": "1118b4f25f8bde931d642a0c22e21e91d27decb53e7fac4d434b3f2336fc4694",
+    "validation_started.json": "b91b13fbcafce47ccf84f6a3c022b47805b6a0e62d5263db63e9076172778320"
+  },
+  "limitations": [
+    "Raw OOF probabilities and model weights are absent from the ZIP; their numerical contents were not independently recomputed.",
+    "Previously observed Internal Validation, not independent test; no speaker-disjoint guarantee."
+  ]
+}

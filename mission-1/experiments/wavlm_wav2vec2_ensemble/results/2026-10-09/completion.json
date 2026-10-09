@@ -1,0 +1,49 @@
+{
+  "status": "complete",
+  "identity": "c1ba79a77b42690af05de21bfaf6a354acbac45617e08458a88dbadf4488df3f",
+  "wavlm_weight": 0.75,
+  "selected": {
+    "n": 5597,
+    "correct": 5497,
+    "wrong": 100,
+    "accuracy": 0.9821332856887618,
+    "gender_accuracy": {
+      "F": 0.9848841115216661,
+      "M": 0.9790076335877863
+    },
+    "confusion_F_M": [
+      [
+        2932,
+        45
+      ],
+      [
+        55,
+        2565
+      ]
+    ]
+  },
+  "refit_wavlm_baseline": {
+    "n": 5597,
+    "correct": 5490,
+    "wrong": 107,
+    "accuracy": 0.9808826156869752,
+    "gender_accuracy": {
+      "F": 0.9838763856231105,
+      "M": 0.9774809160305343
+    },
+    "confusion_F_M": [
+      [
+        2929,
+        48
+      ],
+      [
+        59,
+        2561
+      ]
+    ]
+  },
+  "session_seconds": 9054.811648481,
+  "scope": "Previously observed Internal Validation; not an independent test. Official Validation unused. No speaker-disjoint guarantee.",
+  "historical_wavlm_correct": 5490,
+  "baseline_reproduced": true
+}

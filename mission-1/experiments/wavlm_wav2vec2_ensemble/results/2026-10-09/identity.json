@@ -1,0 +1,23 @@
+{
+  "code_sha256": "9a97a8b6dd67d751993d429e5613cac1cba7ff628feda58751bcb609ce8ff2c4",
+  "split_sha256": "04b5018778321f775a0bf95949a37636090d4df4e3710b16627dfee309408f06",
+  "wavlm_identity": "49725c8a0b4daed276a2ba30dcde37ffab5e220fdf717b1e2be5e0e700ff9d15",
+  "wav2vec2": {
+    "kind": "export",
+    "sha256": "64cd8d608c5e7e18a0db86193f7b4b26fa08d689aa22e4dab6807b7360bd71c4"
+  },
+  "versions": {
+    "python": "3.13.15",
+    "numpy": "2.2.2",
+    "scipy": "1.15.3",
+    "sklearn": "1.6.1"
+  },
+  "candidates": [
+    0.75,
+    0.5
+  ],
+  "folds": 3,
+  "seed": 42,
+  "wavlm_C": 0.1,
+  "wav2vec2_C": 1.0
+}

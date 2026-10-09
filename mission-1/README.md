@@ -1,10 +1,11 @@
 # Mission 1 · 신고자 음성 성별 분류
 
 신고자(caller)의 음성과 발화 구간으로 통화별 Male / Female을 예측한다.
-**현재 최고 Internal Validation Accuracy는 Frozen WavLM-Large + LR의 98.088262%다.**
-고정 ECAPA 평가까지 완료했으며 99% 목표는 아직 달성하지 못했다. 기록 기준: 2026-10-07.
+**현재 최고 Internal Validation Accuracy는 WavLM + Wav2Vec2 앙상블의 98.213329%다.**
+WavLM + Wav2Vec2 앙상블 평가까지 완료했으며 99% 목표는 아직 달성하지 못했다. 기록 기준: 2026-10-09.
 
-[WavLM 최신 결과·코드](experiments/wavlm_gender_adaptation/results/2026-10-07/README.md) ·
+[앙상블 최신 결과·코드](experiments/wavlm_wav2vec2_ensemble/README.md) ·
+[WavLM 단독 결과·코드](experiments/wavlm_gender_adaptation/results/2026-10-07/README.md) ·
 [전체 실험 이력](EXPERIMENT_LOG.md) · [후속 실험 계획](EXPERIMENT_PLAN_99.md) ·
 [Wav2Vec2 결과](ssl/wav2vec2_frozen/results/REPORT.md) ·
 [ECAPA 결과](experiments/gender_model_comparison/validation_results/REPORT.md)
@@ -20,18 +21,20 @@
 | F0 + Acoustic → LR | 5,105 | 492 | 91.209577% | 89.961832% | 92.307692% |
 | MFCC → RBF SVM | 5,321 | 276 | 95.068787% | 94.809160% | 95.297279% |
 | Frozen Wav2Vec2 → LR | 5,443 | 154 | 97.248526% | 96.755725% | 97.682230% |
-| Frozen Gender ECAPA | 5,419 | 178 | 96.819725% | **97.824427%** | 95.935506% |
-
-| **Frozen WavLM-Large → LR** | **5,490** | **107** | **98.088262%** | 97.748092% | **98.387639%** |
+| Frozen Gender ECAPA | 5,419 | 178 | 96.819725% | 97.824427% | 95.935506% |
+| Frozen WavLM-Large → LR | 5,490 | 107 | 98.088262% | 97.748092% | 98.387639% |
+| **WavLM 75% + Wav2Vec2 25%** | **5,497** | **100** | **98.213329%** | **97.900763%** | **98.488411%** |
 
 ECAPA는 Wav2Vec2의 오답 83개를 교정했지만 정답 107개가 회귀해, 정답이 24개 적었다.
 Male은 개선되고 Female은 하락했다. WavLM은 Wav2Vec2 오답 82건을 교정하고 정답 35건이 회귀해, 정답이 47건 늘었다.
+앙상블은 WavLM 오답 11건을 교정하고 정답 4건이 회귀해 정답이 7건 늘었다.
 99%에는 최소 **5,542 정답 / 최대 55 오답**이 필요하다.
 
 | 실측 작업 | 시간 | 측정 범위 |
 |---|---:|---|
 | Wav2Vec2 L4 embedding 추출·검사 | 11.19시간 | 정상 Training 원본 27,985통화; 읽기·저장·검사 포함 |
 | Wav2Vec2 특징 → LR 학습 | 약 3초 | 저장된 특징으로 로컬 학습 |
+| 앙상블 cache 재사용·OOF·최종 평가 | 2시간 30분 55초 | 반환 로그의 세션 시간; 단계별 분리 미기록 |
 | ECAPA L4 추론·Drive 저장 | 2시간 8분 41초 | Internal Validation 5,597통화; 모델 로딩·최종 ZIP 생성 제외 |
 
 처리 통화 수와 작업 범위가 달라 위 시간을 모델 간 속도 배율로 비교하지 않는다.
@@ -47,6 +50,7 @@ Male은 개선되고 Female은 하락했다. WavLM은 Wav2Vec2 오답 82건을 �
 | ECAPA / WavLM Train 200통화 비교 | 예비 비교 완료 | ECAPA 99%, WavLM 95%; 사용자 전달 출력 기준, 원본 ZIP 독립 검증은 미완료 |
 | 고정 ECAPA Validation | 평가·로컬 검증 완료 | 96.819725%, 5,597개 exact coverage, 기록된 실패 0건 |
 | Frozen WavLM-Large + LR | 평가·로컬 검증 완료 | 98.088262%, 107오답; backbone 적응 생략 |
+| WavLM + Wav2Vec2 앙상블 | 평가·반환 예측 검증 완료 | 98.213329%, 100오답; 75:25 선택 |
 | 최신 모델 조사·추가 학습 설계 | 제안·인계 단계 | MERaLiON-GR, WavLM 학습, Wav2Vec2 부분 fine-tuning 후보 정리 |
 
 **Train CV·Train 200통화·Internal Validation은 서로 다른 평가다.**
