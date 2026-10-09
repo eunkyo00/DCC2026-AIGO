@@ -1,0 +1,86 @@
+{
+  "wavlm_weight": 0.75,
+  "baseline": {
+    "n": 22388,
+    "correct": 21952,
+    "wrong": 436,
+    "accuracy": 0.9805252814007503,
+    "gender_accuracy": {
+      "F": 0.982532751091703,
+      "M": 0.9782442748091603
+    },
+    "confusion_F_M": [
+      [
+        11700,
+        208
+      ],
+      [
+        228,
+        10252
+      ]
+    ]
+  },
+  "candidates": [
+    {
+      "wavlm_weight": 0.75,
+      "metrics": {
+        "n": 22388,
+        "correct": 21979,
+        "wrong": 409,
+        "accuracy": 0.981731284616759,
+        "gender_accuracy": {
+          "F": 0.9832045683574068,
+          "M": 0.980057251908397
+        },
+        "confusion_F_M": [
+          [
+            11708,
+            200
+          ],
+          [
+            209,
+            10271
+          ]
+        ]
+      },
+      "fold_deltas": [
+        0.000803966233418163,
+        0.002009915583545463,
+        0.0008040739748056414
+      ],
+      "eligible": true
+    },
+    {
+      "wavlm_weight": 0.5,
+      "metrics": {
+        "n": 22388,
+        "correct": 21969,
+        "wrong": 419,
+        "accuracy": 0.981284616758978,
+        "gender_accuracy": {
+          "F": 0.9824487739334901,
+          "M": 0.9799618320610687
+        },
+        "confusion_F_M": [
+          [
+            11699,
+            209
+          ],
+          [
+            210,
+            10270
+          ]
+        ]
+      },
+      "fold_deltas": [
+        -0.000669971861181895,
+        0.002545893072490979,
+        0.0004020369874028207
+      ],
+      "eligible": false
+    }
+  ],
+  "rule": "3 folds nonnegative gain AND total >=0.1 percentage point; ties prefer WavLM; otherwise baseline",
+  "scope": "Train OOF selection, not an unbiased test; call split is not guaranteed speaker-disjoint",
+  "identity": "c1ba79a77b42690af05de21bfaf6a354acbac45617e08458a88dbadf4488df3f"
+}

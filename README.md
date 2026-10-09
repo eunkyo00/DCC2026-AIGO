@@ -124,7 +124,9 @@ threshold 조정을 고려할 만한 수준. 오디오가 이미 8kHz/mono로 �
   F0 + Acoustic + LR, MFCC(13계수) + RBF SVM, Frozen Wav2Vec2 + LR, 고정 Gender ECAPA 평가를 완료했다.
 - **라벨**: 통화 json의 `gender`
 - **결과**: 동일 Internal Validation 5,597통화에서 각각 91.209577%, 95.068787%,
-  97.248526%, 96.819725%. 추가 WavLM-Large + LR 실험은 98.088262%(107오답)로 현재 최고다.
+  97.248526%, 96.819725%. 추가 WavLM-Large + LR은 98.088262%(107오답),
+  WavLM 75% + Wav2Vec2 25% 앙상블은 **98.213329%(100오답)**로 현재 최고다.
+  [앙상블 결과·실행 코드](mission-1/experiments/wavlm_wav2vec2_ensemble/README.md) 참고.
   [WavLM 결과·실행 코드](mission-1/experiments/wavlm_gender_adaptation/results/2026-10-07/README.md) 참고.
   전체 L4 Wav2Vec2 embedding 추출 및 감사는 실제 11.19시간 걸렸다.
 - **초기 공통 유틸리티 예제**: 5초 pad/trim, MFCC 40계수와 100건 속도 측정은 초기
