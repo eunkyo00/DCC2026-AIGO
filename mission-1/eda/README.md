@@ -85,9 +85,6 @@ WAV와 허용된 startAt/endAt/speaker만 구성해야 한다.
 ```bash
 /tmp/ddc-eda/bin/python mission-1/eda/test_eda.py
 /tmp/ddc-eda/bin/python mission-1/eda/audit_archive.py "/Users/joeunkyo/Downloads/대학부 데이터.zip"
-/tmp/ddc-eda/bin/python mission-1/eda/audit_failed_json.py \
-  --data-root "/Volumes/STORYLiNK/대학부 데이터" \
-  --archive "/Users/joeunkyo/Downloads/대학부 데이터.zip"
 /tmp/ddc-eda/bin/python mission-1/eda/audit_pitch_peak.py \
   --data-root "/Volumes/STORYLiNK/대학부 데이터" \
   --archive "/Users/joeunkyo/Downloads/대학부 데이터.zip"
@@ -98,9 +95,6 @@ split 간 바이트 중복·비식별 출력을 검증한다. 실제 데이터�
 `audit_archive.py`는 압축 해제 없이 ZIP 목록 및 JSON만 읽어 누락 분포와 ID 교차를
 `eda_outputs/archive_crosscheck.json`에 기록한다. WAV payload/CRC 검사 결과는 아니다.
 이 보조 확인 결과를 외장 드라이브 파일과 합쳐 표본 수를 늘리지 않는다.
-`audit_failed_json.py`는 `calls.csv`에 없는 JSON을 찾아 압축본과 비교하고
-`json_failure_audit.json`에 해독 결과·크기·SHA256·바이트 차이를 기록한다.
-원본 수리나 압축 해제를 수행하지 않는다. 먼저 본 EDA를 완료한 뒤 실행한다.
 `audit_pitch_peak.py`는 반복된 329Hz F0 추정값을 점검하기 위한 이번 데이터 전용 진단이다.
 반복 구간을 가진 남녀 각 1통화와 낮은 F0 남성 대조 1통화의 실제 파형을 검사한다.
 ZIP은 가명 참조를 로컬 파일명으로 연결하는 목록으로만 쓰고, 오디오는 외장 드라이브에서 읽는다.

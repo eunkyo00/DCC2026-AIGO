@@ -10,7 +10,7 @@
 - `call_id`는 EDA의 `file_ref`와 동일하며 `SHA256(NFC(파일 stem))`이다. 실제 인물 ID가 아니다.
 - EDA `calls.csv`에서 `split=Training`, `matched=True`만 선택했다. 공식 Validation 3,640개는 배정·비율·majority 결정에 사용하지 않았다.
 - EDA `segments.csv`의 발화 경계·화자·gender를 재사용했다. WAV 경로만 Training 파일 목록에서 연결했다. WAV/JSON 내용을 다시 읽지 않았다.
-- Training WAV 누락 1,213개와 파싱 실패 JSON 2개는 기존 EDA와 같이 제외했다. 이를 복구한 데이터는 v1에 조용히 편입하지 않는다.
+- 기존 EDA에서 확정한 Training 27,985통화를 v1의 고정 분석 대상으로 사용한다.
 
 **컬럼 정의:** `n_segments`는 신고자(speaker=1) segment 수, `total_duration`은 신고자 segment 길이의 단순 합(초)이다. 겹침 제거 시간은 EDA의 `reporter_union_duration`으로 별도 보존한다. `n_all_segments`와 `all_segment_duration`은 상담원을 포함한다. 음성을 결합하는 aggregation이나 전처리는 수행하지 않았다.
 
