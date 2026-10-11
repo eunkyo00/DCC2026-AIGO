@@ -1,0 +1,17 @@
+# Python 3.10~3.12 권장. GPU에 맞는 PyTorch를 먼저 별도로 설치하세요.
+# 공식 설치 선택기: https://pytorch.org/get-started/locally/
+# 예: NVIDIA RTX 50 시리즈/호환 드라이버, Windows 또는 Linux:
+# python -m pip install torch==2.8.0 --index-url https://download.pytorch.org/whl/cu128
+# CPU 전용: python -m pip install torch==2.8.0 --index-url https://download.pytorch.org/whl/cpu
+# Mac CPU 전용: python -m pip install torch==2.8.0
+# 그다음 이 폴더에서: python -m pip install -r requirements.txt
+# Colab/Jupyter/Google Drive 라이브러리는 필요하지 않습니다.
+transformers==4.46.3
+tokenizers==0.20.3
+huggingface-hub==0.31.4
+numpy==2.0.2
+scipy==1.15.3
+scikit-learn==1.6.1
+soundfile==0.13.1
+joblib==1.4.2
+threadpoolctl==3.6.0
