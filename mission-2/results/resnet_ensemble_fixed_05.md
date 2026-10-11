@@ -1,4 +1,6 @@
-# 현재 유지 모델 — ResNet18 + ResNet34, Accuracy 91.419%
+# 이전 기준 모델 — ResNet18 + ResNet34, Accuracy 91.419%
+
+> 과거 비교 기록이다. 최신 후보는 [ResNet18/34/WavLM4 30:30:40, 91.972%](resnet_wavlm_ensemble_20261011/README.md)다. 아래 '유지 모델' 표현은 2026-10-06 당시 판단이다.
 
 ## 근거와 범위
 

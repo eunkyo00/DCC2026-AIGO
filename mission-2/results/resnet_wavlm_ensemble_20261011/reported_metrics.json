@@ -1,0 +1,39 @@
+{
+  "source": "user_supplied_colab_console_logs_transcribed_not_original_ratios_json",
+  "scope": "official_validation_weight_selection_not_independent_test",
+  "samples": 111947,
+  "operator_samples": 53845,
+  "caller_samples": 58102,
+  "metric_unit": "percent",
+  "threshold": 0.5,
+  "selected_weights": {"resnet18": 0.3, "resnet34": 0.3, "wavlm4": 0.4},
+  "selected_accuracy": 91.972,
+  "selected_operator_recall": 87.990,
+  "selected_caller_recall": 95.663,
+  "selected_confusion_matrix": null,
+  "wavlm_training_samples": 100000,
+  "ratios": [
+    {"wavlm_weight": 0.15, "accuracy": 91.675, "operator_recall": 87.297, "caller_recall": 95.732},
+    {"wavlm_weight": 0.20, "accuracy": 91.771, "operator_recall": 87.464, "caller_recall": 95.763},
+    {"wavlm_weight": 0.25, "accuracy": 91.819, "operator_recall": 87.540, "caller_recall": 95.785},
+    {"wavlm_weight": 0.30, "accuracy": 91.883, "operator_recall": 87.653, "caller_recall": 95.802},
+    {"wavlm_weight": 0.35, "accuracy": 91.942, "operator_recall": 87.815, "caller_recall": 95.766},
+    {"wavlm_weight": 0.40, "accuracy": 91.972, "operator_recall": 87.990, "caller_recall": 95.663},
+    {"wavlm_weight": 0.45, "accuracy": 91.954, "operator_recall": 88.179, "caller_recall": 95.453},
+    {"wavlm_weight": 0.50, "accuracy": 91.659, "operator_recall": 88.218, "caller_recall": 94.849},
+    {"wavlm_weight": 0.55, "accuracy": 91.358, "operator_recall": 88.181, "caller_recall": 94.301},
+    {"wavlm_weight": 0.60, "accuracy": 91.181, "operator_recall": 88.160, "caller_recall": 93.980}
+  ],
+  "complementarity": {
+    "resnet_definition": "equal_weight_resnet18_resnet34_at_threshold_0.5",
+    "resnet_wrong_wavlm_correct": 3573,
+    "resnet_correct_wavlm_wrong": 4685,
+    "both_wrong": 6033
+  },
+  "caveats": [
+    "Metrics transcribed at displayed precision; do not infer exact selected confusion counts.",
+    "WavLM probabilities exported to six decimal places; actual checkpoint ensemble re-evaluation pending.",
+    "Legacy ResNet epoch selection used tuned scores; organizer clarification remains necessary.",
+    "300k WavLM training has not produced a score and is not part of this result."
+  ]
+}
