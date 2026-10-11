@@ -3,6 +3,8 @@ import io
 import contextlib
 import json
 import tempfile
+import subprocess
+import shutil
 import unittest
 from unittest.mock import patch
 import zipfile
@@ -12,8 +14,11 @@ import numpy as np
 import soundfile as sf
 import torch
 from transformers import WavLMConfig, WavLMModel, Wav2Vec2Config, Wav2Vec2Model
-import core
-import pipeline as p
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
+import run_full29200 as p
+p.load_dependencies()
+core=p
 
 
 class FullRunTests(unittest.TestCase):
@@ -200,11 +205,24 @@ class FullRunTests(unittest.TestCase):
             self.assertTrue(p.read(self.out/'export_verification.json')['predictions_match'])
             with zipfile.ZipFile(archive) as z:
                 self.assertIsNone(z.testzip())
-                self.assertTrue({'model.pt','core.py','inference.py','run_full29200.py','requirements.txt','metrics.json'}<=set(z.namelist()))
+                self.assertTrue({'model.pt','run_full29200.py','requirements.txt','metrics.json'}<=set(z.namelist()))
                 self.assertFalse(any(n.endswith('.wav') for n in z.namelist()))
             state=torch.load(self.out/'.work'/'export'/'model.pt',weights_only=True,map_location='cpu')
             self.assertEqual(state['train_calls'],30)
             self.assertEqual(state['evaluation_train_calls'],24)
+            # Downloaded file runs in an otherwise empty folder; neither training nor prediction imports sibling scripts.
+            isolated=self.root/'single_file_download';isolated.mkdir()
+            script=isolated/'run_full29200.py'
+            shutil.copyfile(Path(p.__file__),script)
+            help_run=subprocess.run([sys.executable,str(script),'--help'],cwd=isolated,capture_output=True,text=True,timeout=30)
+            self.assertEqual(help_run.returncode,0,help_run.stderr)
+            csv_path=isolated/'predictions.csv'
+            predict=subprocess.run([sys.executable,str(script),'--predict','--audio-dir',str(raw),
+                '--label-dir',str(raw),'--checkpoint',str(self.out/'.work'/'export'/'model.pt'),
+                '--predictions',str(csv_path),'--device','cpu'],cwd=isolated,capture_output=True,text=True,timeout=60)
+            self.assertEqual(predict.returncode,0,predict.stderr)
+            self.assertEqual(len(csv_path.read_text().splitlines()),31)
+            self.assertEqual(sorted(v.name for v in isolated.iterdir()),['predictions.csv','run_full29200.py'])
 
     def test_signal_bounds_and_nonempty(self):
         raw=self.dataset(2)
