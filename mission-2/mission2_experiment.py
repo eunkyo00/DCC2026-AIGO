@@ -1,5 +1,19 @@
 # Mission 2: 단일 파일 실험. 사용법과 지정할 경로는 파일 하단 주석 참조.
 from __future__ import annotations
+
+# ===== 사용자 설정 시작 =====
+# 아래 경로를 팀원 컴퓨터의 실제 경로로 수정한 뒤 실행: python mission2_experiment.py
+DATA_ROOT = ''              # 필수: Training/Validation 하위 폴더가 있는 원본 WAV+JSON 폴더
+TRAIN_ROOT = ''             # 선택: Training 경로를 따로 지정할 때 (폴더 또는 WAV+JSON ZIP)
+VALID_ROOT = ''             # 선택: Validation 경로를 따로 지정할 때 (둘 다 지정)
+OUTPUT_ROOT = ''            # 필수: 결과/체크포인트를 보관할 영구 저장 폴더
+INITIAL_CHECKPOINT = ''     # 선택: 기존 ResNet18 best_model.pt. 비우면 ImageNet에서 시작
+LOCAL_CACHE = ''            # 선택: 빠른 SSD 캐시 폴더. 비우면 OUTPUT_ROOT/.cache
+RUN_NAME = 'resnet_4way_v1'  # 재개 시 같은 이름 유지
+MINUTES = 300              # 이번 실행 추가 허용 시간(분). 재개할 때 변경 가능
+# 경로/초기 가중치는 같은 실험 재개 시 변경하지 마세요. CUDA GPU가 필요합니다.
+# 설치: CUDA용 torch/torchvision + numpy soundfile==0.13.1 librosa==0.11.0
+# ===== 사용자 설정 끝 =====
 import csv, gc, hashlib, io, json, math, os, random, shutil, sys, tempfile, time, unicodedata, zipfile
 from collections import OrderedDict
 from concurrent.futures import ThreadPoolExecutor
@@ -12,7 +26,7 @@ from torch.nn import functional as F
 
 VERSION = 'm2-resume-1'
 # Budget-only update: training/data/checkpoint semantics are unchanged.
-COMPATIBLE_RUNNER_HASHES = {'5e4f258c051308b426be61e160c9025adad032858ff8c5f02962ac4e3cfdbbaa', 'ee778e7d15510ad7e71ac2ac86aa594f52fe330c6f83b694c21968f0518357ad'}
+COMPATIBLE_RUNNER_HASHES = {'694658f956b2bd0817bf2c9ffb939217fe0a3f83f046c6f44888b8e0c67977a1', '5e4f258c051308b426be61e160c9025adad032858ff8c5f02962ac4e3cfdbbaa', 'ee778e7d15510ad7e71ac2ac86aa594f52fe330c6f83b694c21968f0518357ad'}
 VARIANTS = {'base': dict(n_fft=2048, win_length=2048, hop_length=512, frames=24),
             'fine': dict(n_fft=512, win_length=200, hop_length=80, frames=151)}
 CONDITIONS = [('A', 'base', 'mean'), ('B', 'fine', 'mean'),
@@ -577,11 +591,19 @@ def runtime_device():
         raise RuntimeError('CUDA GPU가 필요합니다. NVIDIA 드라이버와 CUDA용 PyTorch 설치를 확인하세요.')
     return torch.device('cuda')
 
+def runner_code_hash():
+    # 상단 경로/시간 값 수정은 코드 변경으로 취급하지 않습니다.
+    source = Path(__file__).read_text(encoding='utf-8')
+    start = source.index('# ===== 사용자 설정 시작 =====')
+    end = source.index('# ===== 사용자 설정 끝 =====', start)
+    source = source[:start] + source[end:]
+    return hashlib.sha256(source.encode('utf-8')).hexdigest()
+
 def run(cfg):
     out=Path(cfg['output_root'])/cfg['run_name']; out.mkdir(parents=True,exist_ok=True)
     # User may extend only the time budget when resuming. Model/data changes need a new run name.
     immutable={k:v for k,v in cfg.items() if k not in ('max_minutes','extra_minutes','local_cache','checkpoint_seconds')}
-    immutable['runner_sha256']=sha(__file__)
+    immutable['runner_sha256']=runner_code_hash()
     lock=out/'config.json'
     if lock.exists() and read_json(lock)!=immutable:
         saved=read_json(lock)
@@ -759,15 +781,17 @@ def run(cfg):
 def main(argv=None):
     import argparse
     parser = argparse.ArgumentParser(description='Mission 2 ResNet 4조건 비교 및 체크포인트 재개')
-    parser.add_argument('--data-root', help='Training/Validation 하위 폴더를 포함한 원본 데이터 경로')
-    parser.add_argument('--train-root', help='Training 폴더 또는 WAV+JSON ZIP 경로')
-    parser.add_argument('--valid-root', help='Validation 폴더 또는 WAV+JSON ZIP 경로')
-    parser.add_argument('--output-root', required=True, help='영구 저장 디스크의 결과 상위 폴더')
-    parser.add_argument('--run-name', default='resnet_4way_v1')
-    parser.add_argument('--initial-checkpoint', help='기존 resnet18_smallstem/first_plus_whole best_model.pt (선택)')
-    parser.add_argument('--local-cache', help='빠른 SSD 캐시 경로 (선택, 기본: 결과 폴더의 .cache)')
-    parser.add_argument('--minutes', type=int, default=300, help='이번 실행 추가 허용 시간, 기본 300분')
+    parser.add_argument('--data-root', default=DATA_ROOT or None, help='Training/Validation 하위 폴더를 포함한 원본 데이터 경로')
+    parser.add_argument('--train-root', default=TRAIN_ROOT or None, help='Training 폴더 또는 WAV+JSON ZIP 경로')
+    parser.add_argument('--valid-root', default=VALID_ROOT or None, help='Validation 폴더 또는 WAV+JSON ZIP 경로')
+    parser.add_argument('--output-root', default=OUTPUT_ROOT or None, help='영구 저장 디스크의 결과 상위 폴더')
+    parser.add_argument('--run-name', default=RUN_NAME)
+    parser.add_argument('--initial-checkpoint', default=INITIAL_CHECKPOINT or None, help='기존 resnet18_smallstem/first_plus_whole best_model.pt (선택)')
+    parser.add_argument('--local-cache', default=LOCAL_CACHE or None, help='빠른 SSD 캐시 경로 (선택, 기본: 결과 폴더의 .cache)')
+    parser.add_argument('--minutes', type=int, default=MINUTES, help='이번 실행 추가 허용 시간, 기본 300분')
     args = parser.parse_args(argv)
+    if not args.output_root:
+        parser.error('파일 상단 OUTPUT_ROOT를 지정하세요. 또는 --output-root로 입력하세요.')
     if args.minutes <= 0 or not args.run_name or '/' in args.run_name or '\\' in args.run_name or '..' in args.run_name:
         parser.error('minutes는 양수, run-name은 경로 기호 없는 이름이어야 합니다.')
     def absolute(value):
