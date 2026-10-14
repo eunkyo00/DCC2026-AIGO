@@ -1,5 +1,9 @@
 # Mission 3 — 통화 텍스트의 9개 증상 다중 라벨 분류
 
+## 제출 파일 다운로드 (2026-10-14)
+
+[Mission3 제출 패키지 다운로드·복원 안내](SUBMISSION_DOWNLOAD.md) — 모델 포함 약 2.5GB, 두 조각을 합쳐 `Mission3.zip`으로 복원합니다. PPT는 별도 제출입니다.
+
 ## 팀 공유 보고서·PPT 원고 (2026-10-10)
 
 - [MISSION3_PPT_DRAFT_2026-10-09.md — PPT 8페이지 원고·발표자 설명](MISSION3_PPT_DRAFT_2026-10-09.md)
