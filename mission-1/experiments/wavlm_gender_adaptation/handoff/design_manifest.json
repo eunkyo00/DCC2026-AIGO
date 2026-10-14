@@ -1,0 +1,41 @@
+{
+  "source_hashes": {
+    "validation/split_assignments.csv": "04b5018778321f775a0bf95949a37636090d4df4e3710b16627dfee309408f06",
+    "validation/manifests/calls.csv": "dc57d0f7bea6e06017ac3e27444a0ff5bb299e401ea787400e84cbdf7d072e23",
+    "eda/eda_outputs/segments.csv": "8bf8c83c0190232e4500b4067bc28d2611b09dd227a7ce4dc9c3741e6dcce584"
+  },
+  "inner_split_sha256": "b6664bee9b72dd14a53743388274577d6c5b73e5ef5f51ab4d53da6fa3321e17",
+  "inner_counts": {
+    "dev": 4478,
+    "inner_train": 17910
+  },
+  "inner_gender_counts": {
+    "inner_train": {
+      "F": 9526,
+      "M": 8384
+    },
+    "dev": {
+      "M": 2096,
+      "F": 2382
+    }
+  },
+  "rule": "gender-stratified SHA256(wavlm-inner-v1|42|call_id), ascending digest then ID; first round(n/5) dev",
+  "seed": 42,
+  "layers": [
+    6,
+    12,
+    18,
+    24
+  ],
+  "window_seconds": 12,
+  "caller_hours": 260.3162811111111,
+  "pooled_float32_GiB": 0.854034423828125,
+  "four_layer_frame_fp16_GiB_approx": 357.4900100708008,
+  "all_25_states_frame_fp16_GiB_approx": 2234.312562942505,
+  "lr_peak_RAM_budget_GiB": 5,
+  "drive_free_required_GiB": 8,
+  "metadata_label_mismatch_train": 0,
+  "train_overlap_risk_calls": 21578,
+  "audio_listening_status": "pending; source WAV volume unavailable locally",
+  "notes": "Frame figures exclude filesystem/metadata; pooled cache has no frame tensors. Audio overlap is annotation risk, not proof of a wrong speaker."
+}

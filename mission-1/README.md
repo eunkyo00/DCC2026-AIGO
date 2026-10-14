@@ -1,105 +1,90 @@
 # Mission 1 · 신고자 음성 성별 분류
 
-## 최종 제출 파일 (PPT 제외)
+**최종 제출 모델은 Frozen WavLM-Large + Wav2Vec2-base 특징에 각각 학습한 Logistic Regression(LR)의 확률을 50:50으로 결합한다.** Training 29,200통화 전체로 제출용 LR을 재학습했으며, 공식 Validation 3,640통화에서 **98.241758% (3,576정답 / 64오답)**를 기록했다. 사전학습 음성 모델 본체는 동결했고 fine-tuning하지 않았다.
 
-- **[전체 5종 ZIP 다운로드](https://github.com/eunkyo00/DCC2026-AIGO/releases/download/mission1-submission-20261009/Mission1_final_submission.zip)** — 약 1.03GB, `model.pt` 포함
-- [제출 소스 폴더](final_submission/): `inference.py`, `model.py`, `train.ipynb`, `requirements.txt`
-- `train.ipynb`에는 실제 학습 로그를 보존했다. 모델 파일은 용량 때문에 Release ZIP으로 제공한다.
-- CUDA/BF16 지원 GPU 필요. 코드·로그·체크포인트 및 압축 무결성 확인 완료; 전체 음성 입력 → CSV의 CUDA 실행은 미검증.
+[최종 제출 코드·실행 노트북](final_submission/README.md) · [학습·선택 기록](final_submission/run_records/) · [공식 Validation 예측 CSV](final_submission/outputs/mission1.csv) · [실험별 안내](EXPERIMENT_INDEX.md)
+
+## 진행 과정
+
+### 1. 데이터와 평가 기준 구성
+
+119 통화의 WAV와 JSON을 파일명으로 매칭하고, JSON의 `speaker=1`인 신고자 구간을 `startAt`/`endAt`(ms)으로 잘랐다. 상담원(`speaker=0`) 구간은 분류 대상에서 제외했다. 성별은 학습 정답으로만 사용하며, 추론에서는 텍스트·성별·주소를 모델 입력으로 사용하지 않는다.
+
+초기 실험은 당시 파이프라인에서 사용한 **27,985통화**를 Train 22,388 / Internal Validation 5,597로 분리했다. 같은 통화의 발화가 양쪽에 섞이지 않도록 통화 단위로 고정했고, 동일 분할에서 모델과 오답을 비교했다. 반복되는 약 329Hz 추정값을 합성 신호와 스펙트럼으로 점검해 F0 품질 기준에 반영했다. [EDA](eda/REPORT.md)와 [분할 기록](validation/REPORT.md)은 당시 조건의 기록이다.
+
+### 2. 음향 특징에서 사전학습 음성 표현으로 확장
+
+F0·음향 특징 + LR, MFCC + RBF SVM, Frozen Wav2Vec2 + LR을 차례로 비교했다. 고정 Gender ECAPA와 WavLM-Large도 평가했다. 단독 정확도뿐 아니라 이전 모델만 맞힌 통화를 확인해 특징·모델의 보완 가능성을 살폈다.
+
+| 초기 동일 Internal Validation 5,597통화 | 정답 | 오답 | 정확도 |
+|---|---:|---:|---:|
+| Female 고정 baseline | 2,977 | 2,620 | 53.189209% |
+| F0 + Acoustic → LR | 5,105 | 492 | 91.209577% |
+| MFCC → RBF SVM | 5,321 | 276 | 95.068787% |
+| Frozen Wav2Vec2 → LR | 5,443 | 154 | 97.248526% |
+| Frozen Gender ECAPA | 5,419 | 178 | 96.819725% |
+| Frozen WavLM-Large → LR | 5,490 | 107 | 98.088262% |
+| WavLM 75% + Wav2Vec2 25% | 5,497 | 100 | 98.213329% |
+
+저장된 Wav2Vec2 특징의 LR/SVM·MFCC 결합을 Train 3-fold에서 비교하고, OOF 오답을 길이·무음·발화 수·F0 지표로 분석했다. 오류 원인을 잡음·화자 혼입·라벨 오류로 확정하지는 않았다. WavLM은 Wav2Vec2 대비 82건을 교정하고 35건의 신규 오류가 생겼다.
+
+### 3. 초기 75:25 앙상블 검증
+
+기존 특징 캐시를 재사용해 Train 3-fold OOF에서 75:25와 50:50을 비교했다. 당시 규칙은 모든 fold에서 WavLM 단독 대비 하락이 없고 전체 정확도 +0.1%p 이상 개선하는 것이었다. 75:25를 채택하고 Internal Validation에서 11건 교정·4건 신규 오류, 순오답 7건 감소를 확인했다. [상세 결과](experiments/wavlm_wav2vec2_ensemble/results/2026-10-09/README.md)
+
+### 4. 전체 29,200통화로 최종 재실험
+
+최종 제출에서는 WAV/JSON **29,200쌍 모두**를 다시 검사했고 정상 29,200·오류 0건을 확인했다. 이전 특징·분할·LR을 가져오지 않고 두 모델의 특징 추출과 LR 학습을 새로 실행했다.
+
+1. 성별 층화·seed 42로 Train **23,360** / Internal Validation **5,840**통화를 분리했다.
+2. 신고자 구간을 8→16kHz로 변환했다. WavLM은 연결된 신고자 음성을 최대 12초 창으로 나누고 마지막 층 특징을 실제 샘플 수로 가중 평균했다. Wav2Vec2는 발화별 최대 15초 창 특징을 집계한 뒤 발화 간 평균을 사용했다. 고정 길이 버킷 패딩을 적용했다.
+3. 두 backbone은 동결하고 표준화 + LR만 학습했다. C는 WavLM 0.1, Wav2Vec2 1.0으로 고정했으며, OOF fold마다 해당 학습 부분에서만 표준화와 LR을 fit했다.
+4. Train 3-fold OOF에서 WavLM 비중 **1.0 / 0.75 / 0.5 / 0.25 / 0.0**을 비교해 **정답 수 최대**인 50:50을 선택했다. 50:50은 22,937정답, 75:25는 22,933정답이었다. 이는 초기 실험의 채택 규칙과 다르다.
+5. 비중을 고정한 뒤 내부 검증을 평가했다. 이후 제출용 LR은 **Training 29,200통화 전체**로 다시 학습했다.
+6. 두 backbone 가중치·설정·LR을 `model.pt`에 담아 내보내고 실제 CUDA 음성 3건의 재추론을 확인했다. 최종 추론 명령으로 공식 Validation 예측 CSV를 생성해 채점했다.
+
+[데이터 검사](final_submission/run_records/dataset_check.json) · [OOF 선택](final_submission/run_records/selection.json) · [내부 검증](final_submission/run_records/metrics.json) · [모델 내보내기 검증](final_submission/run_records/export_verification.json)
+
+## 최종 결과와 평가 범위
+
+| 평가 | 모델 | 정답 / 전체 | 정확도 |
+|---|---|---:|---:|
+| 새 Internal Validation | WavLM + LR | 5,724 / 5,840 | 98.013699% |
+| 새 Internal Validation | Wav2Vec2 + LR | 5,661 / 5,840 | 96.934932% |
+| 새 Internal Validation | 50:50 앙상블 | 5,730 / 5,840 | 98.116438% |
+| **공식 Validation** | **전체 Training 재학습 후 50:50 앙상블** | **3,576 / 3,640** | **98.241758%** |
+
+공식 Validation의 성별별 정답률은 Female **1,929/1,959 (98.468606%)**, Male **1,647/1,681 (97.977394%)**이며, 혼동행렬은 행=실제 F/M, 열=예측 F/M 기준 `[[1929, 30], [34, 1647]]`이다. 공식 평가 수치는 [실행된 노트북](final_submission/Mission1_full29200_train.ipynb)과 [제출 자료 설명](final_submission/README.md)에 기록되어 있다.
+
+새 내부 검증 수치는 23,360통화로 학습한 평가 모델의 결과다. 29,200통화 전체 재학습 모델의 별도 독립 test 점수로 해석하지 않는다. 공식 Validation은 학습·비중 선택에 사용하지 않고 학습 후 채점에만 사용했다. 비공개 Test 결과는 없다.
+
+초기 98.213329%와 최종 내부 98.116438%는 데이터 수·분할·패딩 방식·선택 규칙이 달라 직접적인 성능 증감으로 비교하지 않는다. 통화 단위 분할은 동일 화자의 다른 통화가 양쪽에 있을 가능성까지 배제하지 않는다. 99% 목표는 최종 공식 Validation에서도 달성하지 못했다.
+
+## 실행과 제출 파일
+
+실제 최종 실행본은 **`final_submission/`**이다. 다른 실험 폴더의 추론 코드를 섞지 않는다.
 
 ```bash
-python inference.py --audio_dir WAV_FOLDER --label_dir JSON_FOLDER --ckpt_path model.pt --output ./outputs/mission1.csv
+cd mission-1/final_submission
+python -m pip install -r requirements.txt
+python inference.py --audio_dir WAV_FOLDER --label_dir JSON_FOLDER --ckpt_path model.pt --output outputs/mission1.csv
+
+# Training 원본으로 새 결과 폴더에서 학습
+python -u run_full29200.py --source TRAINING_FOLDER --run-dir NEW_RESULT_FOLDER
 ```
 
+GPU용 PyTorch와 드라이버는 실행 환경에 맞게 준비한다. 최종 실행 환경은 Windows 11, RTX 5060 Laptop GPU 8GB, Python 3.11.9, PyTorch 2.8.0+cu128, BF16이며, 세부 버전은 [requirements-lock.txt](final_submission/requirements-lock.txt)에 있다. 실행된 노트북 전체 기록은 약 163.7분, 공식 Validation 추론 셀은 약 17분이다. 서로 다른 환경의 속도를 보장하는 값은 아니다.
 
-신고자(caller)의 음성과 발화 구간으로 통화별 Male / Female을 예측한다.
-**현재 최고 Internal Validation Accuracy는 WavLM + Wav2Vec2 앙상블의 98.213329%다.**
-WavLM + Wav2Vec2 앙상블 평가까지 완료했으며 99% 목표는 아직 달성하지 못했다. 기록 기준: 2026-10-09.
-
-[앙상블 최신 결과·코드](experiments/wavlm_wav2vec2_ensemble/README.md) ·
-[WavLM 단독 결과·코드](experiments/wavlm_gender_adaptation/results/2026-10-07/README.md) ·
-[전체 실험 이력](EXPERIMENT_LOG.md) · [후속 실험 계획](EXPERIMENT_PLAN_99.md) ·
-[Wav2Vec2 결과](ssl/wav2vec2_frozen/results/REPORT.md) ·
-[ECAPA 결과](experiments/gender_model_comparison/validation_results/REPORT.md)
-
-## 동일 Internal Validation 결과
-
-모든 모델은 Training 원본에서 분리한 **같은 5,597통화(Male 2,620 / Female 2,977)**로 평가했다.
-성별별 Accuracy는 해당 실제 성별 통화 중 정답 비율이다.
-
-| 모델 | 정답 | 오답 | Overall | Male | Female |
-|---|---:|---:|---:|---:|---:|
-| Majority · Female 고정 | 2,977 | 2,620 | 53.189209% | 0.000000% | 100.000000% |
-| F0 + Acoustic → LR | 5,105 | 492 | 91.209577% | 89.961832% | 92.307692% |
-| MFCC → RBF SVM | 5,321 | 276 | 95.068787% | 94.809160% | 95.297279% |
-| Frozen Wav2Vec2 → LR | 5,443 | 154 | 97.248526% | 96.755725% | 97.682230% |
-| Frozen Gender ECAPA | 5,419 | 178 | 96.819725% | 97.824427% | 95.935506% |
-| Frozen WavLM-Large → LR | 5,490 | 107 | 98.088262% | 97.748092% | 98.387639% |
-| **WavLM 75% + Wav2Vec2 25%** | **5,497** | **100** | **98.213329%** | **97.900763%** | **98.488411%** |
-
-ECAPA는 Wav2Vec2의 오답 83개를 교정했지만 정답 107개가 회귀해, 정답이 24개 적었다.
-Male은 개선되고 Female은 하락했다. WavLM은 Wav2Vec2 오답 82건을 교정하고 정답 35건이 회귀해, 정답이 47건 늘었다.
-앙상블은 WavLM 오답 11건을 교정하고 정답 4건이 회귀해 정답이 7건 늘었다.
-99%에는 최소 **5,542 정답 / 최대 55 오답**이 필요하다.
-
-| 실측 작업 | 시간 | 측정 범위 |
-|---|---:|---|
-| Wav2Vec2 L4 embedding 추출·검사 | 11.19시간 | 정상 Training 원본 27,985통화; 읽기·저장·검사 포함 |
-| Wav2Vec2 특징 → LR 학습 | 약 3초 | 저장된 특징으로 로컬 학습 |
-| 앙상블 cache 재사용·OOF·최종 평가 | 2시간 30분 55초 | 반환 로그의 세션 시간; 단계별 분리 미기록 |
-| ECAPA L4 추론·Drive 저장 | 2시간 8분 41초 | Internal Validation 5,597통화; 모델 로딩·최종 ZIP 생성 제외 |
-
-처리 통화 수와 작업 범위가 달라 위 시간을 모델 간 속도 배율로 비교하지 않는다.
-
-## 지금까지 한 시도
-
-| 단계 | 상태 | 확인한 내용 |
-|---|---|---|
-| EDA·고정 분할 | 완료 | 정상 통화·caller 구간 검증, Train/Validation 통화 단위 분리 |
-| Majority → F0 → MFCC → Wav2Vec2 | 완료 | 같은 Validation에서 baseline 비교 |
-| 저장된 Wav2Vec2 특징의 LR/SVM·MFCC 결합 | 완료 | 8개 설정 × 3-fold; 최고 Train CV 평균 97.453991% |
-| Train OOF 오류 분석 | 정량 분석 완료 | 길이·segment 수·무음·F0 연관 분석, 청취용 48통화 표본 준비 |
-| ECAPA / WavLM Train 200통화 비교 | 예비 비교 완료 | ECAPA 99%, WavLM 95%; 사용자 전달 출력 기준, 원본 ZIP 독립 검증은 미완료 |
-| 고정 ECAPA Validation | 평가·로컬 검증 완료 | 96.819725%, 5,597개 exact coverage, 기록된 실패 0건 |
-| Frozen WavLM-Large + LR | 평가·로컬 검증 완료 | 98.088262%, 107오답; backbone 적응 생략 |
-| WavLM + Wav2Vec2 앙상블 | 평가·반환 예측 검증 완료 | 98.213329%, 100오답; 75:25 선택 |
-| 최신 모델 조사·추가 학습 설계 | 제안·인계 단계 | MERaLiON-GR, WavLM 학습, Wav2Vec2 부분 fine-tuning 후보 정리 |
-
-**Train CV·Train 200통화·Internal Validation은 서로 다른 평가다.**
-Train 200통화의 99%나 MFCC 결합 CV 결과를 위 Validation 성능표에 섞지 않는다.
-기존 Wav2Vec2 본체는 완전히 고정했고 LR/SVM만 학습했다. 부분 fine-tuning은 완료 결과가 없다.
-추가 Train 2,000통화 비교와 전체 원본에 대한 성별 모델 추론은 생략했다.
-자세한 후보별 수치와 선택 이유는 [실험 이력](EXPERIMENT_LOG.md)에 정리했다.
-
-## 데이터와 해석 범위
-
-- 정상 Training 원본 27,985통화, caller 442,639구간 → Train 22,388 / Internal Validation 5,597.
-- 실제 8kHz mono WAV, JSON `speaker=1` 구간 사용. `speaker=0`은 상담원이다.
-- seed 42의 고정 [split_assignments.csv](validation/split_assignments.csv)를 모든 실험에서 사용한다.
-- 공식 Validation 3,640통화는 별도 데이터이며 위 성능표에 포함하지 않는다.
-- 사람 식별자가 없어 통화 단위 분리가 사람 단위 분리를 보장하지 않는다.
-- 이미 여러 baseline에서 관찰한 Internal Validation이므로 새 독립 test라고 부르지 않는다.
-- 잡음·다중 화자·라벨 오류 원인은 아직 청취로 확정하지 않았다.
-- ECAPA와 Wav2Vec2는 통화 집계 방식도 다르다. 전체 파이프라인 비교이며 차이 전부를 backbone 효과로 해석하지 않는다.
-
-원본 매칭 실패와 음향 품질은 [EDA 보고서](eda/REPORT.md), 분할 검증은
-[Validation 보고서](validation/REPORT.md)에서 확인한다.
-
-## 파일 안내
-
-| 찾는 내용 | 문서·폴더 |
+| 제출 구성 | 파일 |
 |---|---|
-| 완료된 시도와 결과·판단 | [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md) |
-| 아직 실행하지 않은 후보·평가 규칙 | [EXPERIMENT_PLAN_99.md](EXPERIMENT_PLAN_99.md) |
-| F0 baseline | [baseline/f0_lr/](baseline/f0_lr/README.md) |
-| MFCC baseline | [baseline/mfcc_svm/](baseline/mfcc_svm/README.md) |
-| Frozen Wav2Vec2 | [ssl/wav2vec2_frozen/](ssl/wav2vec2_frozen/README.md) |
-| Wav2Vec2 최종 L4 지표·예측 | [results/full_l4/](ssl/wav2vec2_frozen/results/full_l4/metrics.json) |
-| Train 내부 분류기·특징 결합 비교 | [experiments/embedding_classifiers/](experiments/embedding_classifiers/README.md) |
-| ECAPA/WavLM 예비 비교와 ECAPA 최종 검증 | [experiments/gender_model_comparison/](experiments/gender_model_comparison/README.md) |
-| ECAPA Colab 재현·resume 안내 | [ECAPA_VALIDATION_README.md](experiments/gender_model_comparison/ECAPA_VALIDATION_README.md) |
+| 추론 진입점 | [inference.py](final_submission/inference.py) |
+| 모델·전처리·학습·추론 구현 | [run_full29200.py](final_submission/run_full29200.py) |
+| 출력과 학습 로그가 있는 노트북 | [Mission1_full29200_train.ipynb](final_submission/Mission1_full29200_train.ipynb) |
+| 패키지 버전 | [requirements.txt](final_submission/requirements.txt), [requirements-lock.txt](final_submission/requirements-lock.txt) |
+| 실행 근거 | [run_records/](final_submission/run_records/) |
+| 공식 Validation 예측 | [outputs/mission1.csv](final_submission/outputs/mission1.csv) |
+| 학습 완료 가중치 | `model.pt` — 별도 최종 제출 ZIP에 포함 |
 
-과거 인계 문서와 초기 smoke/benchmark 결과는 당시 단계의 기록으로 보존한다.
-Wav2Vec2 `results/` 바로 아래의 초기 Mac 측정과 `results/full_l4/` 최종 결과를 구분한다.
-원본 WAV·embedding cache는 GitHub에 포함하지 않는다. 최종 제출 가중치와 ZIP은 위 GitHub Release에서 제공한다.
-별도 경량 모델 및 다른 창의 작업은 이 문서의 검증 완료 결과에 포함하지 않았다.
+`model.pt`는 약 1.64GB로 GitHub에 포함하지 않는다. SHA-256은 `abbfae10784130564362c0e2d6153f9458d154d9261abdf300c30407d29a17a7`이다. 원본 음성·라벨과 특징 캐시도 저장소에서 제외한다.
+
+과거 완료 실험, 미실행 후보, 대체 실행 코드는 [실험별 안내](EXPERIMENT_INDEX.md)에서 구분한다. [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md), [EXPERIMENT_PLAN_99.md](EXPERIMENT_PLAN_99.md), [PPT_SUPPORT.md](PPT_SUPPORT.md)는 이전 실험 조건의 이력이며 최종 29,200통화 실험 설정은 위 설명과 `final_submission/`을 따른다.

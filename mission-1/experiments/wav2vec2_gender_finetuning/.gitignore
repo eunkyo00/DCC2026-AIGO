@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.zip
+runs/
+*.pt
+*.pth
+*.wav
+*.npz
+cache/
+config.json
+
+data/jobs.json

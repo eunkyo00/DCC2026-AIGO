@@ -1,0 +1,7 @@
+data/jobs.json
+config.json
+__pycache__/
+*.pt
+*.joblib
+*.wav
+*.npz

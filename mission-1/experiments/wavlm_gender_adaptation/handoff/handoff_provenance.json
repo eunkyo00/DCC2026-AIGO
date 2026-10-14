@@ -1,0 +1,25 @@
+{
+  "parent_bundle_sha256": "60f18368fdb1303a413b46d359c4e9c1cf5e4bff7ed236e85d071b05031767d0",
+  "upstream_files": {
+    "common.py": "3275fad1af43dec3cd9e83f43a0e00b23157593c66b1697c5581d230061ca2ad",
+    "audio_model.py": "f87aaeedf6d84ae70f73951d01322f5101537cac5f70f37d90151bc0168926ea",
+    "runner.py": "bb377d5e6b4912bbef540ecbaa8d3a2ac713fb7d6f75d35be51daabe2f93b820",
+    "verify.py": "6ff050a1344dc67fbf93baf3d3169715fefebd7931562b219300f47fd8887e45",
+    "requirements.txt": "bb7607b1c0364d2bbd6c2d7d58b7e328c7530e6f4463311aa659945700a377df"
+  },
+  "source_hashes": {
+    "validation/split_assignments.csv": "04b5018778321f775a0bf95949a37636090d4df4e3710b16627dfee309408f06",
+    "validation/manifests/calls.csv": "dc57d0f7bea6e06017ac3e27444a0ff5bb299e401ea787400e84cbdf7d072e23",
+    "eda/eda_outputs/segments.csv": "8bf8c83c0190232e4500b4067bc28d2611b09dd227a7ce4dc9c3741e6dcce584"
+  },
+  "audio_headers_sha256": "3c2311af5d8992d1b84df74b16a235b67bb2060106b6df4420b454189b50e4db",
+  "required_wav_calls": 27985,
+  "required_wav_bytes": 32280993944,
+  "compatibility": "Independent output identity; never resume original Colab output with portable code",
+  "patches": [
+    "Explicit data/output/HF/lock paths",
+    "No dependency on old Drive identity",
+    "CPU WAV inventory check",
+    "Self-contained baseline verification"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "data_root": "RESOLVED_FROM_EXISTING_CONFIG_OR_IDENTITY",
+  "output": "/content/drive/MyDrive/DDC-Colab/wav2vec2_finetuning_v1",
+  "seed": 42,
+  "layers": [0, 2, 4],
+  "epochs": 4,
+  "backbone_lr": 0.00001,
+  "head_lr": 0.001,
+  "weight_decay": 0.01,
+  "accumulation_calls": 4,
+  "precision": "bf16",
+  "gradient_checkpointing": false,
+  "checkpoint_steps": 25,
+  "benchmark_steps": 100,
+  "memory_fraction_limit": 0.85,
+  "max_step_seconds": 120.0
+}

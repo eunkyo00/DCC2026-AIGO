@@ -1,0 +1,10 @@
+{
+  "data_root": "",
+  "output_dir": "",
+  "hf_cache_dir": "",
+  "gpu_lock_path": "",
+  "expected_gpu": "",
+  "precision": "",
+  "crop_seconds": 12,
+  "accumulation": 4
+}

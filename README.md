@@ -104,8 +104,8 @@ symptom(9개 클래스, Training 기준, 통화당 0~9개 멀티라벨):
 | 등장 횟수 | 6,771 | 6,334 | 5,310 | 5,186 | 4,463 | 3,927 | 3,465 | 3,341 | 2,905 |
 
 최다/최소 클래스 비율 약 2.3배 — 심한 불균형은 아니지만 Mission 3에서 class weighting이나
-threshold 조정을 고려할 만한 수준. 오디오가 이미 8kHz/mono로 통일돼 있어 **리샘플링이나
-채널 변환이 필요 없다는 것**이 가장 중요한 발견.
+threshold 조정을 고려할 만한 수준. 원본 오디오가 8kHz/mono로 통일되어 있다. 공통 데이터 검사에는 채널 변환이 필요 없으며,
+Mission 1의 WavLM·Wav2Vec2 입력은 사전학습 모델에 맞춰 16kHz로 리샘플링한다.
 
 전체 plot(gender/urgencyLevel/disasterMedium/sentiment/symptom 분포)은 `eda_outputs/*.png`,
 원본 집계는 `eda_outputs/labels_{split}.csv` 참고.
@@ -119,20 +119,12 @@ threshold 조정을 고려할 만한 수준. 오디오가 이미 8kHz/mono로 �
 
 ### Mission 1 — 성별 분류
 
-- **입력 근거**: 라벨의 `startAt`/`endAt`/`speaker`만 학습 시 사용 가능 (대회 규정)
-- **현재 실험**: 신고자(`speaker == 1`) 구간을 사용하고 모델별 특징을 통화 단위로 집계한다.
-  F0 + Acoustic + LR, MFCC(13계수) + RBF SVM, Frozen Wav2Vec2 + LR, 고정 Gender ECAPA 평가를 완료했다.
-- **라벨**: 통화 json의 `gender`
-- **결과**: 동일 Internal Validation 5,597통화에서 각각 91.209577%, 95.068787%,
-  97.248526%, 96.819725%. 추가 WavLM-Large + LR은 98.088262%(107오답),
-  WavLM 75% + Wav2Vec2 25% 앙상블은 **98.213329%(100오답)**로 현재 최고다.
-  [앙상블 결과·실행 코드](mission-1/experiments/wavlm_wav2vec2_ensemble/README.md) 참고.
-  [WavLM 결과·실행 코드](mission-1/experiments/wavlm_gender_adaptation/results/2026-10-07/README.md) 참고.
-  전체 L4 Wav2Vec2 embedding 추출 및 감사는 실제 11.19시간 걸렸다.
-- **초기 공통 유틸리티 예제**: 5초 pad/trim, MFCC 40계수와 100건 속도 측정은 초기
-  전처리 예제이며 현재 Mission 1 실험 설정·전체 소요시간을 나타내지 않는다.
-- **진행 상태**: Train CV·OOF 정량 오류 분석, ECAPA/WavLM 200통화 비교, ECAPA Validation 검증까지 완료.
-  본체 fine-tuning·표본 청취·새 입력용 통합 추론은 완료 결과에 포함하지 않는다. [Mission 1 README](mission-1/README.md)에서 설정·결과·폴더를 확인한다.
+- **최종 방식:** 신고자(`speaker=1`) 음성을 8→16kHz로 변환하고 고정 WavLM-Large·Wav2Vec2-base 특징에 각각 LR을 학습한 뒤 확률을 **50:50**으로 결합한다.
+- **전체 재실험:** Training WAV/JSON 29,200쌍 검사 → Train 23,360 / 내부 검증 5,840 → Train 3-fold OOF 정답 수로 비중 선택 → 내부 평가 → 제출 LR을 29,200통화 전체로 재학습.
+- **결과:** 새 내부 검증 **98.116438% (5,730/5,840)**, 전체 재학습 모델의 공식 Validation **98.241758% (3,576/3,640)**. 공식 Validation은 학습·비중 선택에 사용하지 않았다.
+- **초기 실험:** 27,985통화 조건에서 F0·MFCC·Wav2Vec2·ECAPA·WavLM과 75:25 앙상블을 비교했다. 데이터·분할·패딩·선택 규칙이 바뀌어 새 수치와 직접 비교하지 않는다.
+- **실행·제출:** [최종 제출 폴더](mission-1/final_submission/README.md). 가중치 `model.pt`는 별도 제출 ZIP에 포함한다.
+- [Mission 1 진행 과정·최종 결과](mission-1/README.md) · [실험별 안내](mission-1/EXPERIMENT_INDEX.md)
 
 ### Mission 2 — 화자 분류 (신고자 vs 119대원)
 

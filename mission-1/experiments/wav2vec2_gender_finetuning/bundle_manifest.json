@@ -1,0 +1,24 @@
+{
+  "model": "facebook/wav2vec2-base",
+  "revision": "0b5b8e868dd84f03fd87d01f9c4ff0f080fecfe8",
+  "source_hashes": {
+    "validation/split_assignments.csv": "04b5018778321f775a0bf95949a37636090d4df4e3710b16627dfee309408f06",
+    "validation/manifests/calls.csv": "dc57d0f7bea6e06017ac3e27444a0ff5bb299e401ea787400e84cbdf7d072e23",
+    "eda/eda_outputs/segments.csv": "8bf8c83c0190232e4500b4067bc28d2611b09dd227a7ce4dc9c3741e6dcce584"
+  },
+  "files": {
+    "README.md": "6dce1aa81aaa3cb281bb4ac4f0de47af8933d7d22fb6318fa9ed47be1f1642e1",
+    "common.py": "c2cc36e62a0fa6f235f4e7a8cf9dafb8d854de202cc3c3161529a5b49d3f14c6",
+    "engine.py": "29ca46d3b999b89e54bd81a645901cf910346b5d421de145273daed7b8f7eeb9",
+    "run.py": "1b5f72444aeabbf57a2aebe6601414987c9297b4ac8b81c90751e18c9b9e6d9c",
+    "verify.py": "4123f5c0a3f59f8755d41da4f1a2fcda22ea722fcd446c6913e3f524d222bf07",
+    "requirements.txt": "fda5c4fedc36b28d78dfd6ee431bdc3fd126122e24f04d167a3653b7caa5ad9c",
+    "config.template.json": "16a65a82541829cfd08e89dfb773ec1fe65698d6f65dd6c210e81f73788a80bb",
+    "data/baseline_sources.json": "504f86113020d5b9c13f7b7b7acd4c582caf5abab4cfa0c0905df4f0dfe9117a",
+    "data/baselines.json": "6b1a43c579fb1f6ee2e7efcd9e0c7d73cb733dd7d4efd09dcc0985a7c1b2dbaf",
+    "data/inner_split.csv": "b6664bee9b72dd14a53743388274577d6c5b73e5ef5f51ab4d53da6fa3321e17",
+    "data/inner_split.json": "fdc49b3edefbc121d7dfc9b524c028fa74feaa6a9780e6a7d01b61159f38913d",
+    "data/jobs.json": "1f29454856e7f3339e4d8fd7c19844cc940a69f2bd40d63a12c1b3bedc71ce79",
+    "data/split_identity.json": "89d8018d0c83ca5bd6eb98fb7d5c94717dee81f7834e4155da7057699986dbcb"
+  }
+}
