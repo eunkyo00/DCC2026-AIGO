@@ -1,0 +1,39 @@
+{
+  "source_calls": 29200,
+  "train_calls": 23360,
+  "internal_validation_calls": 5840,
+  "ensemble": {
+    "calls": 5840,
+    "correct": 5730,
+    "accuracy": 0.9811643835616438,
+    "gender_accuracy": {
+      "F": 0.9842342342342343,
+      "M": 0.9776720351390923
+    }
+  },
+  "individual": {
+    "wavlm": {
+      "calls": 5840,
+      "correct": 5724,
+      "accuracy": 0.9801369863013699,
+      "gender_accuracy": {
+        "F": 0.9845559845559846,
+        "M": 0.9751098096632503
+      }
+    },
+    "wav2vec2": {
+      "calls": 5840,
+      "correct": 5661,
+      "accuracy": 0.9693493150684932,
+      "gender_accuracy": {
+        "F": 0.9716859716859717,
+        "M": 0.9666910688140556
+      }
+    }
+  },
+  "wavlm_weight": 0.5,
+  "protocol": "full29200-fixed-buckets-v1",
+  "final_refit_calls": 29200,
+  "scope": "call-disjoint internal validation; not official Validation; not guaranteed person-disjoint",
+  "changed_from_previous": "full 29200, new split, fixed bucket padding, auto BF16/FP32; old accuracy not directly comparable"
+}

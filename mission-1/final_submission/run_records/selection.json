@@ -1,0 +1,57 @@
+{
+  "wavlm_weight": 0.5,
+  "selection_scope": "3-fold OOF on Training partition only",
+  "candidates": [
+    {
+      "wavlm_weight": 1.0,
+      "calls": 23360,
+      "correct": 22916,
+      "accuracy": 0.9809931506849315,
+      "gender_accuracy": {
+        "F": 0.9833520990831591,
+        "M": 0.9783086216364635
+      }
+    },
+    {
+      "wavlm_weight": 0.75,
+      "calls": 23360,
+      "correct": 22933,
+      "accuracy": 0.9817208904109589,
+      "gender_accuracy": {
+        "F": 0.9841563455042625,
+        "M": 0.9789492952590152
+      }
+    },
+    {
+      "wavlm_weight": 0.5,
+      "calls": 23360,
+      "correct": 22937,
+      "accuracy": 0.9818921232876713,
+      "gender_accuracy": {
+        "F": 0.9842367701463729,
+        "M": 0.9792238696686802
+      }
+    },
+    {
+      "wavlm_weight": 0.25,
+      "calls": 23360,
+      "correct": 22793,
+      "accuracy": 0.9757277397260274,
+      "gender_accuracy": {
+        "F": 0.9769985523564421,
+        "M": 0.9742815302947099
+      }
+    },
+    {
+      "wavlm_weight": 0.0,
+      "calls": 23360,
+      "correct": 22691,
+      "accuracy": 0.971361301369863,
+      "gender_accuracy": {
+        "F": 0.973942415956249,
+        "M": 0.9684239428885227
+      }
+    }
+  ],
+  "identity": "82ae2833b25a2c5336d7a736bfb0cf60f87a32e8d4c2795ce255dd77475a363e"
+}

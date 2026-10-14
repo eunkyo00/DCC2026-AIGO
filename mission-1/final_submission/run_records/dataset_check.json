@@ -1,0 +1,11 @@
+{
+  "expected": 29200,
+  "wav_files": 29200,
+  "json_files": 29200,
+  "missing_wav": [],
+  "missing_json": [],
+  "failures": [],
+  "valid_calls": 29200,
+  "pass": true,
+  "verification": "all file bytes SHA256, labels, headers, caller bounds; decode checked at extraction"
+}

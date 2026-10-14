@@ -1,76 +1,39 @@
-"""Mission 1 제출 진입점: WAV/JSON 폴더에서 통화별 성별 CSV를 생성한다."""
+"""Mission 1 제출용 추론 진입점.
+
+사용법 (명령어 1회로 결과 CSV 생성):
+    python inference.py --audio_dir {wav folder} --label_dir {json folder} \
+        --ckpt_path {checkpoint file} --output ./outputs/mission1.csv
+
+- 입력: WAV 폴더, 같은 파일명의 JSON 폴더. JSON에서는 발화 구간(startAt/endAt)과 speaker만 사용한다.
+  신고자(speaker=1) 구간만 잘라 모델에 넣으며, gender·text·address 같은 필드는 모델 입력에 쓰지 않는다.
+- 출력: CSV 한 개. 열은 [audio file name], [gender]  (gender 값은 F 또는 M)
+- 모델: ckpt_path의 model.pt 하나로 충분하다 (WavLM-Large, Wav2Vec2-base 가중치와 로지스틱 회귀가 모두 들어 있어
+  인터넷 연결이나 별도 다운로드가 필요 없다). 실제 추론 로직은 run_full29200.py의 predict_folder를 사용한다.
+"""
 import argparse
-import csv
-import json
-import math
+import sys
 from pathlib import Path
 
-
-def caller_intervals(document):
-    """허용된 startAt/endAt/speaker만 읽는다. 시간 단위는 원본의 ms이다."""
-    intervals = []
-    for utterance in document['utterances']:
-        speaker = utterance.get('speaker', utterance.get('Speaker'))
-        if speaker not in (0, 1, '0', '1'):
-            raise ValueError('speaker must be 0 or 1')
-        if str(speaker) != '1':
-            continue
-        start, end = utterance['startAt'], utterance['endAt']
-        if not all(type(v) in (int, float) and math.isfinite(v) for v in (start, end)):
-            raise ValueError('Invalid interval time')
-        if not 0 <= start < end:
-            raise ValueError('Invalid caller interval')
-        intervals.append((start / 1000, end / 1000))
-    if not intervals:
-        raise ValueError('No caller interval; cannot silently invent a prediction')
-    return intervals
+import run_full29200 as core  # 같은 폴더의 학습·모델 코드
 
 
-def input_pairs(audio_dir, label_dir):
-    """파일 stem으로 매칭하되, 중복 이름·누락은 잘못된 매칭 대신 오류로 보고한다."""
-    labels = {}
-    for path in sorted(label_dir.rglob('*')):
-        if path.is_file() and path.suffix.lower() == '.json':
-            if path.stem in labels:
-                raise ValueError(f'Duplicate JSON stem: {path.stem}')
-            labels[path.stem] = path
-    audio = sorted(p for p in audio_dir.rglob('*') if p.is_file() and p.suffix.lower() == '.wav')
-    if not audio:
-        raise ValueError('No WAV input found')
-    if len({p.name for p in audio}) != len(audio):
-        raise ValueError('Duplicate audio filenames')
-    for path in audio:
-        if path.stem not in labels:
-            raise ValueError(f'Missing JSON: {path.name}')
-    return [(path, labels[path.stem]) for path in audio]
-
-
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    for name in ('audio_dir', 'label_dir', 'ckpt_path', 'output'):
-        parser.add_argument('--' + name, type=Path, required=True)
-    args = parser.parse_args()
-    pairs = input_pairs(args.audio_dir, args.label_dir)
-    # 모델 의존성은 실행 시 로드해 --help에는 GPU나 가중치가 필요하지 않다.
-    from model import GenderEnsemble
-    model = GenderEnsemble(args.ckpt_path)
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    temporary = args.output.with_name(args.output.name + '.tmp')
+def main(argv=None):
+    parser = argparse.ArgumentParser(description="Mission 1 gender inference (WavLM + Wav2Vec2 ensemble)")
+    parser.add_argument("--audio_dir", type=Path, required=True, help="WAV 폴더")
+    parser.add_argument("--label_dir", type=Path, required=True, help="JSON 폴더")
+    parser.add_argument("--ckpt_path", type=Path, required=True, help="학습 완료 모델 가중치 (model.pt)")
+    parser.add_argument("--output", type=Path, default=Path("./outputs/mission1.csv"), help="결과 CSV 경로")
+    parser.add_argument("--device", choices=("auto", "cuda", "cpu"), default="auto")
+    args = parser.parse_args(argv)
     try:
-        with temporary.open('w', encoding='utf-8', newline='') as stream:
-            writer = csv.writer(stream)
-            writer.writerow(['audio file name', 'gender'])
-            for audio, label in pairs:
-                document = json.loads(label.read_text(encoding='utf-8-sig'))
-                # gender/text 등 비허용 라벨은 추론 모델에 전달하지 않는다.
-                prediction = model.predict(audio, caller_intervals(document))
-                writer.writerow([audio.name, prediction])
-        temporary.replace(args.output)
-    except Exception:
-        temporary.unlink(missing_ok=True)
-        raise
-    print(f'Saved {len(pairs)} predictions: {args.output}')
+        core.load_dependencies()  # torch·transformers 등 지연 로딩
+        result = core.predict_folder(args.audio_dir, args.label_dir, args.ckpt_path, args.output, device=args.device)
+    except Exception as error:  # 오류 원인을 한 줄로 알리고 비정상 종료 코드를 반환
+        print(type(error).__name__ + ": " + str(error), file=sys.stderr)
+        return 1
+    print("예측 CSV: " + str(result), flush=True)
+    return 0
 
 
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    raise SystemExit(main())

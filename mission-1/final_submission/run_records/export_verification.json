@@ -1,0 +1,7 @@
+{
+  "calls": 3,
+  "max_probability_error": 0.00043776389322880416,
+  "tolerance": 0.02,
+  "predictions_match": true,
+  "device": "cuda"
+}

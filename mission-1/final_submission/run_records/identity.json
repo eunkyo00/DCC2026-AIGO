@@ -1,0 +1,35 @@
+{
+  "format": "full29200-fixed-buckets-v1",
+  "calls": 29200,
+  "seed": 42,
+  "precision": "bf16",
+  "block_calls": 64,
+  "batch_seconds": {
+    "wavlm": 8.0,
+    "wav2vec2": 16.0
+  },
+  "device": "cuda",
+  "models": {
+    "wavlm": [
+      "microsoft/wavlm-large",
+      "c1423ed94bb01d80a3f5ce5bc39f6026a0f4828c"
+    ],
+    "wav2vec2": [
+      "facebook/wav2vec2-base",
+      "0b5b8e868dd84f03fd87d01f9c4ff0f080fecfe8"
+    ]
+  },
+  "scope": "fresh features; no previous experiment cache",
+  "source_sha256": "dd919ffadc31d16050ebd8997b56589800d7efa731a0934adefb874a607c1917",
+  "code": {
+    "run_full29200.py": "38eb8a6b1efd0aa17d5174866dd744a36cd93fc2133187b0e73ff2325009b794"
+  },
+  "versions": {
+    "python": "3.11.9",
+    "numpy": "2.0.2",
+    "scipy": "1.15.3",
+    "sklearn": "1.6.1",
+    "torch": "2.8.0+cu128",
+    "transformers": "4.46.3"
+  }
+}
